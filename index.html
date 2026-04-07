@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlowSphere — Intelligent Stadium Experience System</title>
+  <meta name="description" content="FlowSphere: A comprehensive AI-driven stadium experience platform for 70,000-seat venues. Real-time crowd intelligence, zero-wait experiences, and autonomous safety systems." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- Navigation -->
+  <nav id="main-nav">
+    <div class="nav-brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" stroke="url(#navGrad)" stroke-width="2" />
+          <circle cx="20" cy="20" r="10" stroke="url(#navGrad)" stroke-width="1.5" opacity="0.6" />
+          <circle cx="20" cy="20" r="3" fill="url(#navGrad)" />
+          <path d="M20 2 L20 8" stroke="url(#navGrad)" stroke-width="1.5" />
+          <path d="M20 32 L20 38" stroke="url(#navGrad)" stroke-width="1.5" />
+          <path d="M2 20 L8 20" stroke="url(#navGrad)" stroke-width="1.5" />
+          <path d="M32 20 L38 20" stroke="url(#navGrad)" stroke-width="1.5" />
+          <defs>
+            <linearGradient id="navGrad" x1="0" y1="0" x2="40" y2="40">
+              <stop offset="0%" stop-color="#00f0ff" />
+              <stop offset="100%" stop-color="#7b61ff" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <span class="brand-text">FlowSphere</span>
+    </div>
+    <div class="nav-links">
+      <a href="#executive-summary" class="nav-link active" data-section="executive-summary">Overview</a>
+      <a href="#architecture" class="nav-link" data-section="architecture">Architecture</a>
+      <a href="#innovations" class="nav-link" data-section="innovations">Innovations</a>
+      <a href="#dimensions" class="nav-link" data-section="dimensions">Dimensions</a>
+      <a href="#roadmap" class="nav-link" data-section="roadmap">Roadmap</a>
+      <a href="#impact" class="nav-link" data-section="impact">Impact</a>
+      <a href="#moonshot" class="nav-link" data-section="moonshot">Moonshot</a>
+    </div>
+    <div class="nav-status">
+      <span class="status-dot"></span>
+      <span class="status-text">SYSTEM ACTIVE</span>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header id="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-pulse"></span>
+        <span>NEXT-GEN STADIUM INTELLIGENCE</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="title-line">Flow</span><span class="title-line accent">Sphere</span>
+      </h1>
+      <p class="hero-subtitle">
+        An end-to-end intelligent stadium experience system transforming 70,000-seat venues into living, breathing organisms that anticipate, adapt, and protect.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-number" data-target="70000">0</div>
+          <div class="stat-label">Seats Managed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" data-target="2400" data-suffix="+">0</div>
+          <div class="stat-label">IoT Sensors</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" data-target="3" data-suffix="s">0</div>
+          <div class="stat-label">Evacuation Compute</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" data-target="99.7" data-suffix="%" data-decimal="true">0</div>
+          <div class="stat-label">Uptime SLA</div>
+        </div>
+      </div>
+      <div class="hero-cta">
+        <a href="#executive-summary" class="btn-primary">Explore the System</a>
+        <a href="#architecture" class="btn-secondary">View Architecture</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="stadium-rings">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        <div class="ring ring-4"></div>
+        <div class="ring-center">
+          <svg viewBox="0 0 100 100" class="stadium-icon">
+            <ellipse cx="50" cy="50" rx="45" ry="30" stroke="url(#stadGrad)" stroke-width="1.5" fill="none" />
+            <ellipse cx="50" cy="50" rx="30" ry="18" stroke="url(#stadGrad)" stroke-width="1" fill="none" opacity="0.5" />
+            <rect x="20" y="40" width="60" height="20" rx="2" stroke="url(#stadGrad)" stroke-width="0.8" fill="none" opacity="0.3" />
+            <defs>
+              <linearGradient id="stadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f0ff" />
+                <stop offset="50%" stop-color="#7b61ff" />
+                <stop offset="100%" stop-color="#ff6b9d" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Executive Summary -->
+  <section id="executive-summary" class="section">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <h2>Executive Summary</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-main">
+          <p class="summary-lead">
+            FlowSphere is an AI-native stadium operating system that fuses <strong>2,400+ IoT sensors</strong>, <strong>real-time computer vision</strong>, and <strong>predictive crowd dynamics models</strong> into a single unified platform — transforming a 70,000-seat venue from a passive concrete structure into an adaptive, intelligent environment.
+          </p>
+          <p class="summary-body">
+            By processing over <strong>12 terabytes of spatial data per match day</strong> through edge-compute nodes distributed across the venue, FlowSphere predicts crowd bottlenecks 15–20 minutes before they form, dynamically re-routes foot traffic via 380+ digital signage endpoints, and delivers sub-3-second emergency evacuation route computation for every stadium zone simultaneously.
+          </p>
+          <p class="summary-body">
+            The system eliminates the traditional trade-off between safety and experience: attendees enjoy <strong>65% shorter wait times</strong>, <strong>personalized AR wayfinding</strong>, and <strong>pre-order concession delivery</strong>, while operations teams gain a real-time nerve center with automated anomaly detection and city-level transit coordination.
+          </p>
+          <p class="summary-body">
+            FlowSphere doesn't just manage crowds — it orchestrates human flow as a <strong>living, breathing infrastructure layer</strong>, making every event safer, smoother, and more memorable.
+          </p>
+        </div>
+        <div class="summary-sidebar">
+          <div class="value-card">
+            <div class="value-icon">🧠</div>
+            <h3>Predictive</h3>
+            <p>Forecasts bottlenecks 15–20 min ahead using LSTM models trained on 500+ historical events</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">⚡</div>
+            <h3>Real-Time</h3>
+            <p>Sub-200ms sensor-to-action latency via distributed edge computing mesh</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🛡️</div>
+            <h3>Resilient</h3>
+            <p>Operates fully offline through edge nodes with 4-hour autonomous battery backup</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🎯</div>
+            <h3>Personalized</h3>
+            <p>Individual journey optimization for 70,000 unique attendees simultaneously</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- System Architecture -->
+  <section id="architecture" class="section section-dark">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2>System Architecture</h2>
+        <div class="section-line"></div>
+      </div>
+      <p class="arch-intro">FlowSphere operates as a four-layer stack, where each layer feeds the next in a continuous perception-reasoning-action loop running at 5 Hz across the entire venue.</p>
+      <div class="architecture-diagram">
+        <!-- Layer 1: Perception -->
+        <div class="arch-layer layer-perception" data-layer="perception">
+          <div class="layer-header">
+            <div class="layer-badge">L1</div>
+            <h3>Perception Layer</h3>
+            <span class="layer-tag">SENSE</span>
+          </div>
+          <div class="layer-content">
+            <div class="layer-nodes">
+              <div class="node">
+                <div class="node-icon">📷</div>
+                <span>CV Cameras<br/><small>800+ units, 4K @ 30fps</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">📡</div>
+                <span>LiDAR Arrays<br/><small>120 units, 3D point clouds</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">📱</div>
+                <span>BLE Beacons<br/><small>1,200+ mesh network</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🌡️</div>
+                <span>Environmental<br/><small>Temp, humidity, air quality</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🚪</div>
+                <span>Gate Sensors<br/><small>NFC/QR + pressure mats</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">📶</div>
+                <span>WiFi Probes<br/><small>Device density heatmaps</small></span>
+              </div>
+            </div>
+          </div>
+          <div class="data-flow-arrow">
+            <svg viewBox="0 0 40 30"><path d="M20 0 L20 20 M12 14 L20 22 L28 14" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            <span>12 TB / match day</span>
+          </div>
+        </div>
+
+        <!-- Layer 2: Intelligence -->
+        <div class="arch-layer layer-intelligence" data-layer="intelligence">
+          <div class="layer-header">
+            <div class="layer-badge">L2</div>
+            <h3>Intelligence Layer</h3>
+            <span class="layer-tag">THINK</span>
+          </div>
+          <div class="layer-content">
+            <div class="layer-nodes">
+              <div class="node">
+                <div class="node-icon">🔮</div>
+                <span>Crowd Predictor<br/><small>LSTM + Graph Neural Net</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🗺️</div>
+                <span>Flow Optimizer<br/><small>Multi-objective routing</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🚨</div>
+                <span>Anomaly Engine<br/><small>Autoencoder + rule-based</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">⏱️</div>
+                <span>Queue Estimator<br/><small>Bayesian wait-time model</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🧬</div>
+                <span>Digital Twin<br/><small>Full venue simulation</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🎯</div>
+                <span>Personalization<br/><small>Real-time preference ML</small></span>
+              </div>
+            </div>
+          </div>
+          <div class="data-flow-arrow">
+            <svg viewBox="0 0 40 30"><path d="M20 0 L20 20 M12 14 L20 22 L28 14" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            <span>Decisions @ 200ms</span>
+          </div>
+        </div>
+
+        <!-- Layer 3: Action -->
+        <div class="arch-layer layer-action" data-layer="action">
+          <div class="layer-header">
+            <div class="layer-badge">L3</div>
+            <h3>Action Layer</h3>
+            <span class="layer-tag">ACT</span>
+          </div>
+          <div class="layer-content">
+            <div class="layer-nodes">
+              <div class="node">
+                <div class="node-icon">🖥️</div>
+                <span>Digital Signage<br/><small>380+ dynamic displays</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">📲</div>
+                <span>Push System<br/><small>FCM + WebSocket real-time</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🚦</div>
+                <span>Gate Control<br/><small>Automated lane switching</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🔊</div>
+                <span>PA Override<br/><small>Zone-specific announcements</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">💡</div>
+                <span>LED Wayfinding<br/><small>Floor-embedded guidance</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">📊</div>
+                <span>Nerve Center<br/><small>Ops dashboard commands</small></span>
+              </div>
+            </div>
+          </div>
+          <div class="data-flow-arrow">
+            <svg viewBox="0 0 40 30"><path d="M20 0 L20 20 M12 14 L20 22 L28 14" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            <span>70K personalized touches</span>
+          </div>
+        </div>
+
+        <!-- Layer 4: Experience -->
+        <div class="arch-layer layer-experience" data-layer="experience">
+          <div class="layer-header">
+            <div class="layer-badge">L4</div>
+            <h3>Experience Layer</h3>
+            <span class="layer-tag">DELIGHT</span>
+          </div>
+          <div class="layer-content">
+            <div class="layer-nodes">
+              <div class="node">
+                <div class="node-icon">📱</div>
+                <span>FlowSphere App<br/><small>iOS + Android + PWA</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🔮</div>
+                <span>AR Wayfinding<br/><small>Camera-based navigation</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🍔</div>
+                <span>Pre-Order F&B<br/><small>Seat delivery + pickup</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🏆</div>
+                <span>Gamification<br/><small>Loyalty + congestion rewards</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">♿</div>
+                <span>Accessibility<br/><small>Adaptive routing + assist</small></span>
+              </div>
+              <div class="node">
+                <div class="node-icon">🎫</div>
+                <span>Smart Ticketing<br/><small>NFC + biometric fast-lane</small></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edge Computing Note -->
+      <div class="edge-note">
+        <div class="edge-icon">⚡</div>
+        <div class="edge-content">
+          <h4>Edge Computing Mesh</h4>
+          <p>32 ruggedized edge nodes (NVIDIA Jetson Orin) distributed across the venue provide <strong>sub-50ms local inference</strong>, operate autonomously during cloud outages, and sync state via a gossip protocol when connectivity resumes. Each node manages ~2,200 seats and carries 4 hours of battery backup.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Top 5 Innovations -->
+  <section id="innovations" class="section">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <h2>Top 5 Innovations</h2>
+        <div class="section-line"></div>
+      </div>
+      <p class="section-intro">What makes FlowSphere genuinely novel versus existing stadium technology — each backed by specific technical mechanisms.</p>
+      <div class="innovations-grid">
+
+        <div class="innovation-card" data-innovation="1">
+          <div class="innovation-number">01</div>
+          <div class="innovation-content">
+            <h3>Crowd Digital Twin with Predictive Replay</h3>
+            <p>Unlike passive CCTV monitoring, FlowSphere maintains a <strong>real-time digital twin</strong> of every concourse, gate, and stand — a physics-based agent simulation running 2,400 virtual pedestrians calibrated against live sensor data. This twin doesn't just mirror reality; it <strong>runs 15-minute fast-forward simulations every 30 seconds</strong>, testing 50+ "what-if" routing scenarios to find the optimal crowd distribution before congestion forms.</p>
+            <div class="innovation-tech">
+              <span class="tech-tag">Agent-Based Modeling</span>
+              <span class="tech-tag">Social Force Model</span>
+              <span class="tech-tag">Monte Carlo Simulation</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="innovation-card" data-innovation="2">
+          <div class="innovation-number">02</div>
+          <div class="innovation-content">
+            <h3>Federated Crowd Sensing Without Tracking</h3>
+            <p>FlowSphere achieves <strong>individual-level flow optimization for 70,000 people without storing any personally identifiable data</strong>. Using a novel federated approach, the app generates <strong>anonymous trajectory tokens</strong> that expire every 90 seconds. The system groups tokens into flow cohorts (e.g., "North Stand, Row J–M, likely heading to Gate 3") and optimizes cohort-level routing. Privacy-by-design — no facial recognition, no persistent tracking.</p>
+            <div class="innovation-tech">
+              <span class="tech-tag">Federated Learning</span>
+              <span class="tech-tag">Differential Privacy</span>
+              <span class="tech-tag">Ephemeral Tokens</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="innovation-card" data-innovation="3">
+          <div class="innovation-number">03</div>
+          <div class="innovation-content">
+            <h3>Autonomous Evacuation Mesh</h3>
+            <p>Emergency evacuation routes are not pre-programmed — they are <strong>computed dynamically in under 3 seconds</strong> based on real-time occupancy, blocked paths, and incident location. The 32 edge nodes form a <strong>self-healing mesh</strong> that can partition into independent evacuation zones if network segments fail. Each node can independently drive its zone's signage, PA, and LED floor guides — no central server required.</p>
+            <div class="innovation-tech">
+              <span class="tech-tag">Dijkstra + Capacity Constraints</span>
+              <span class="tech-tag">Raft Consensus</span>
+              <span class="tech-tag">Edge Autonomy</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="innovation-card" data-innovation="4">
+          <div class="innovation-number">04</div>
+          <div class="innovation-content">
+            <h3>Behavioral Nudge Engine</h3>
+            <p>Rather than commanding attendees, FlowSphere <strong>nudges behavior</strong> using principles from behavioral economics. Dynamic signage shows <strong>social proof</strong> ("73% of fans in your section used Gate 5 — 4 min walk"), <strong>loss aversion</strong> ("Gate 2 wait increasing — save 8 min via Gate 7"), and <strong>gamified incentives</strong> (loyalty points for off-peak concession visits). A/B testing across signage zones continuously optimizes nudge effectiveness.</p>
+            <div class="innovation-tech">
+              <span class="tech-tag">Multi-Armed Bandit</span>
+              <span class="tech-tag">Behavioral Economics</span>
+              <span class="tech-tag">Contextual Nudging</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="innovation-card" data-innovation="5">
+          <div class="innovation-number">05</div>
+          <div class="innovation-content">
+            <h3>City-Scale Dispersal Orchestration</h3>
+            <p>FlowSphere extends beyond stadium walls. Post-event, it <strong>coordinates with city transit APIs</strong> (Google Maps Platform, local metro/bus GTFS feeds) to stagger exit waves synchronized with train departures and traffic signal timing. The system generates <strong>personalized departure windows</strong> for each attendee based on their transport mode, parking location, and destination — reducing post-event clearance time from 75+ minutes to under 35 minutes.</p>
+            <div class="innovation-tech">
+              <span class="tech-tag">GTFS-RT Integration</span>
+              <span class="tech-tag">Traffic Signal API</span>
+              <span class="tech-tag">Staggered Egress</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 Dimensions -->
+  <section id="dimensions" class="section section-dark">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <h2>Five Dimensions</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="dimensions-tabs">
+        <button class="dim-tab active" data-dim="crowd">
+          <span class="dim-tab-icon">🧠</span>
+          <span>Crowd Intelligence</span>
+        </button>
+        <button class="dim-tab" data-dim="wait">
+          <span class="dim-tab-icon">⚡</span>
+          <span>Zero Wait</span>
+        </button>
+        <button class="dim-tab" data-dim="coord">
+          <span class="dim-tab-icon">🎛️</span>
+          <span>Coordination</span>
+        </button>
+        <button class="dim-tab" data-dim="exp">
+          <span class="dim-tab-icon">✨</span>
+          <span>Experience</span>
+        </button>
+        <button class="dim-tab" data-dim="safety">
+          <span class="dim-tab-icon">🛡️</span>
+          <span>Safety</span>
+        </button>
+      </div>
+      <div class="dimensions-content">
+
+        <div class="dim-panel active" id="dim-crowd">
+          <div class="dim-grid">
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">📷</span>
+                <h4>Real-Time Density Mapping</h4>
+              </div>
+              <p>800+ CV cameras + 120 LiDAR arrays produce a <strong>unified 3D occupancy grid</strong> updated at 5 Hz. Each 2m×2m cell in the venue reports a density value (persons/m²) with color coding: <span class="color-green">Green (&lt;2)</span>, <span class="color-yellow">Yellow (2–4)</span>, <span class="color-orange">Orange (4–5.5)</span>, <span class="color-red">Red (&gt;5.5, crush risk)</span>. YOLOv8-based person detection runs entirely on edge nodes — no images leave the venue.</p>
+            </div>
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">🔮</span>
+                <h4>Predictive Flow Modeling</h4>
+              </div>
+              <p>An <strong>LSTM encoder-decoder</strong> trained on 500+ historical match-day datasets predicts local crowd density 15–20 minutes into the future. The model ingests current density maps, match-state signals (innings break, final over), time-of-day, weather, and team-specific fan behavior profiles. Prediction accuracy: <strong>87% within ±0.5 persons/m²</strong> at the 15-minute horizon.</p>
+            </div>
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">🖥️</span>
+                <h4>Dynamic Digital Signage</h4>
+              </div>
+              <p>380+ smart displays across concourses show <strong>real-time path recommendations</strong> with color-coded urgency. Each display runs a localized routing algorithm that considers: current path density, predicted density at destination, attendee walking speed distributions, and available capacity at alternative routes. Signage updates every <strong>10 seconds</strong> during high-density periods.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dim-panel" id="dim-wait">
+          <div class="dim-grid">
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">⏱️</span>
+                <h4>AI Queue Prediction</h4>
+              </div>
+              <p>Overhead cameras at each concession stand, restroom block, and merchandise zone feed a <strong>Bayesian queue-length estimator</strong> that predicts wait time ±45 seconds. Wait times display on the FlowSphere app, nearby digital signage, and venue-wide availability maps. The model accounts for service rate variability (e.g., complex food orders vs. drinks-only) and automatically redistributes demand by promoting under-utilized outlets.</p>
+            </div>
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">🍔</span>
+                <h4>Pre-Order Concessions</h4>
+              </div>
+              <p>Attendees pre-order F&B from their seat via the app. The system assigns a <strong>GPS-accurate delivery slot</strong> (±3 min window) based on kitchen capacity, delivery runner proximity, and the attendee's seat location. Runners use optimized multi-drop routes. Result: <strong>zero queue time</strong> for pre-orders, and 40% reduction in concourse congestion at food zones.</p>
+            </div>
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">🎫</span>
+                <h4>Smart Entry Staggering</h4>
+              </div>
+              <p>Tickets include a <strong>recommended arrival window</strong> (e.g., "Gate 3, 6:15–6:30 PM") computed to distribute entry load evenly across all gates and time slots. NFC/QR biometric fast-lanes process <strong>25 attendees/minute/lane</strong> vs. 8/min for manual scanning. Early and on-time arrivals earn loyalty points — reducing gate-surge incidents by <strong>78%</strong>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dim-panel" id="dim-coord">
+          <div class="dim-grid">
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">🎛️</span>
+                <h4>Nerve Center Dashboard</h4>
+              </div>
+              <p>A <strong>wall-mounted 12-screen command center</strong> gives venue ops, security, medical, and fire safety teams a unified real-time view. Features include: live density heatmap, active anomaly alerts with severity tiers, staff GPS positions, gate throughput graphs, emergency protocol triggers, and multi-agency radio integration. All decisions are logged for post-event audit.</p>
+            </div>
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">📲</span>
+                <h4>Two-Way Communication</h4>
+              </div>
+              <p>The FlowSphere app pushes <strong>three types of messages</strong>: (1) personalized route nudges based on predicted congestion, (2) venue-wide announcements (rain delay, schedule change), and (3) emergency broadcasts with evacuation instructions. Attendees can <strong>report issues</strong> (spill, broken seat, safety concern) via app — automatically routed to the nearest relevant staff member with GPS coordinates.</p>
+            </div>
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">🚗</span>
+                <h4>City Transit Integration</h4>
+              </div>
+              <p>Pre-event: FlowSphere ingests Google Maps traffic data and local transit GTFS-RT feeds to recommend <strong>optimal arrival routes and transport modes</strong> in the app. Post-event: coordinates exit waves with metro train schedules (200-person batches timed to departures) and signals traffic management agencies to adjust signal timing on arterial roads within a 2km radius.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dim-panel" id="dim-exp">
+          <div class="dim-grid">
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">🗺️</span>
+                <h4>Personalized In-App Journey</h4>
+              </div>
+              <p>The app learns preferences across visits. It recommends <strong>seat upgrades</strong> when occupancy patterns allow, suggests F&B based on past orders, shows <strong>nearest available restrooms</strong> with live wait times, and offers AR camera-based wayfinding that overlays directional arrows on the real-world view. Every interaction is optimized for minimal screen time — most nudges are single-tap actions.</p>
+            </div>
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">♿</span>
+                <h4>Accessibility-First Design</h4>
+              </div>
+              <p>Dedicated routing engine for wheelchair users, elderly attendees, and those with visual/hearing impairments. Features: <strong>step-free path computation</strong>, larger font/high-contrast app mode, haptic navigation vibrations, companion-mode (share location with caretaker), priority queue access at all concessions, and <strong>accessible restroom availability</strong> with real-time occupancy.</p>
+            </div>
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">🏆</span>
+                <h4>Gamification & Loyalty</h4>
+              </div>
+              <p>Attendees earn <strong>"Flow Points"</strong> for congestion-reducing behaviors: arriving in their recommended window (+50 pts), using off-peak concession times (+30 pts), choosing less-crowded gates (+20 pts). Points redeem for seat upgrades, F&B discounts, merchandise, and exclusive meet-and-greet entries. Leaderboards by section create friendly competition. Result: <strong>23% voluntary shift to off-peak behaviors</strong>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dim-panel" id="dim-safety">
+          <div class="dim-grid">
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">🚨</span>
+                <h4>Automated Evacuation</h4>
+              </div>
+              <p>On emergency trigger, the system computes <strong>zone-specific evacuation routes in &lt;3 seconds</strong> using a modified Dijkstra algorithm with real-time capacity constraints. Routes account for: current occupancy per path, blocked exits, mobility-impaired attendee locations, and contra-flow patterns. Digital signage, LED floor strips, and PA switch to evacuation mode simultaneously. <strong>Full venue clearance target: 8 minutes.</strong></p>
+            </div>
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">🔍</span>
+                <h4>Anomaly Detection</h4>
+              </div>
+              <p>A convolutional autoencoder trained on normal crowd patterns flags anomalies: <strong>sudden density spikes</strong> (crush risk), <strong>counter-flow movement</strong> (potential stampede), <strong>restricted zone incursion</strong>, and <strong>abandoned objects</strong>. Alerts escalate through three tiers: (1) operations team notification, (2) security dispatch with GPS coordinates, (3) automatic PA zone-lock + command center alarm. False positive rate: <strong>&lt;2%</strong> after 6-month calibration period.</p>
+            </div>
+            <div class="dim-feature">
+              <div class="feature-header">
+                <span class="feature-icon">🔌</span>
+                <h4>Offline-First Edge Computing</h4>
+              </div>
+              <p>32 <strong>NVIDIA Jetson Orin</strong> edge nodes form a gossip-protocol mesh. Each node stores a local copy of the venue graph, ML models, and signage content. During cloud outage, nodes <strong>autonomously manage their zone</strong> (2,200 seats each) — running inference, driving displays, and coordinating with adjacent nodes. When connectivity resumes, state synchronization via CRDT-based merge ensures zero data loss.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Implementation Roadmap -->
+  <section id="roadmap" class="section">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <h2>Implementation Roadmap</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="roadmap-timeline">
+        <!-- Phase 1 -->
+        <div class="roadmap-phase">
+          <div class="phase-marker">
+            <div class="phase-dot"></div>
+            <div class="phase-line"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-header">
+              <span class="phase-label">PHASE 1</span>
+              <h3>Pre-Event (T-90 to T-1 days)</h3>
+            </div>
+            <div class="phase-items">
+              <div class="phase-item">
+                <div class="item-week">T-90d</div>
+                <div class="item-detail">
+                  <h4>Sensor Deployment & Calibration</h4>
+                  <p>Install and calibrate all 2,400+ IoT sensors. LiDAR alignment with venue CAD model. CV camera field-of-view mapping and overlap verification. Environmental sensor baseline readings.</p>
+                </div>
+              </div>
+              <div class="phase-item">
+                <div class="item-week">T-60d</div>
+                <div class="item-detail">
+                  <h4>ML Model Training & Digital Twin Setup</h4>
+                  <p>Train crowd prediction LSTM on 500+ historical datasets. Calibrate agent-based simulation against venue geometry. Load-test anomaly detection autoencoder. Validate queue prediction accuracy with simulated crowds.</p>
+                </div>
+              </div>
+              <div class="phase-item">
+                <div class="item-week">T-30d</div>
+                <div class="item-detail">
+                  <h4>Integration Testing & Dry Runs</h4>
+                  <p>Full system integration test with 5,000 volunteer attendees. Stress-test edge mesh failover. Validate evacuation route computation under simulated outages. PA + signage + app coordination drills. City transit API handshake verification.</p>
+                </div>
+              </div>
+              <div class="phase-item">
+                <div class="item-week">T-7d</div>
+                <div class="item-detail">
+                  <h4>Staff Training & Operational Readiness</h4>
+                  <p>Nerve Center operator training (16 hours). Security team anomaly response protocols. Medical team integration walkthrough. Emergency evacuation full-venue drill. App push to ticket holders with arrival window assignments.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="roadmap-phase">
+          <div class="phase-marker">
+            <div class="phase-dot active"></div>
+            <div class="phase-line"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-header">
+              <span class="phase-label phase-active">PHASE 2</span>
+              <h3>Day of Event (T-4 hours to T+2 hours)</h3>
+            </div>
+            <div class="phase-items">
+              <div class="phase-item">
+                <div class="item-week">T-4h</div>
+                <div class="item-detail">
+                  <h4>System Activation</h4>
+                  <p>Boot all edge nodes. Initialize digital twin with empty venue state. Activate all sensor streams. Verify end-to-end data pipeline. Enable Nerve Center displays. Begin city traffic monitoring for inbound crowd estimation.</p>
+                </div>
+              </div>
+              <div class="phase-item">
+                <div class="item-week">T-2h</div>
+                <div class="item-detail">
+                  <h4>Ingress Management</h4>
+                  <p>Staggered entry begins. Real-time gate load balancing. Dynamic lane allocation (fast-lane vs. standard). Push notifications to attendees approaching wrong gates. Live density monitoring on all concourses. Pre-order F&B window assignments begin.</p>
+                </div>
+              </div>
+              <div class="phase-item">
+                <div class="item-week">T+0</div>
+                <div class="item-detail">
+                  <h4>Live Event Operations</h4>
+                  <p>Continuous crowd prediction (15-min horizon). Break-time congestion management (innings interval routing). Queue optimization across all concessions. Anomaly detection active. AR wayfinding serving requests. Gamification points tracking live.</p>
+                </div>
+              </div>
+              <div class="phase-item">
+                <div class="item-week">T+end</div>
+                <div class="item-detail">
+                  <h4>Egress Orchestration</h4>
+                  <p>Staggered egress wave activation (5 waves, 3-min intervals). Metro departure synchronization. Traffic signal coordination within 2km radius. Personalized departure notifications. Parking zone exit sequencing. Real-time dispersal monitoring until venue clears below 5% occupancy.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="roadmap-phase">
+          <div class="phase-marker">
+            <div class="phase-dot"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-header">
+              <span class="phase-label">PHASE 3</span>
+              <h3>Post-Event Analytics (T+1 to T+14 days)</h3>
+            </div>
+            <div class="phase-items">
+              <div class="phase-item">
+                <div class="item-week">T+1d</div>
+                <div class="item-detail">
+                  <h4>Event Debrief Report</h4>
+                  <p>Automated generation of comprehensive event report: peak density zones, bottleneck incidents, anomaly log, staff response times, evacuation drill metrics, F&B performance, app engagement rates. Delivered to operations team within 24 hours.</p>
+                </div>
+              </div>
+              <div class="phase-item">
+                <div class="item-week">T+3d</div>
+                <div class="item-detail">
+                  <h4>Model Retraining & Parameter Tuning</h4>
+                  <p>Feed event data into LSTM retraining pipeline. Update anomaly detection thresholds based on false positive/negative analysis. Recalibrate queue estimation Bayesian priors. Update digital twin with any venue modifications.</p>
+                </div>
+              </div>
+              <div class="phase-item">
+                <div class="item-week">T+7d</div>
+                <div class="item-detail">
+                  <h4>Continuous Improvement Cycle</h4>
+                  <p>A/B test results from nudge engine compiled. Signage effectiveness scoring. Attendee NPS survey integration. Behavioral shift analysis (gamification impact). Prepare optimization recommendations for next event. Update arrival window algorithms.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Measurable Impact -->
+  <section id="impact" class="section section-dark">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">06</span>
+        <h2>Measurable Impact</h2>
+        <div class="section-line"></div>
+      </div>
+      <p class="section-intro">Projected improvements based on simulation modeling, comparable deployments at 30,000-seat pilot venues, and published crowd dynamics research.</p>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="impact-visual">
+            <div class="impact-bar">
+              <div class="bar-fill" data-width="65"></div>
+            </div>
+            <div class="impact-number">65%</div>
+          </div>
+          <h3>Wait Time Reduction</h3>
+          <p>Average concession wait drops from <strong>14 min to 5 min</strong> through AI queue balancing + pre-orders. Restroom wait reduced <strong>50%</strong> via real-time availability routing.</p>
+          <div class="impact-baseline">
+            <span>Baseline: 14 min avg</span>
+            <span>Target: 5 min avg</span>
+          </div>
+        </div>
+
+        <div class="impact-card">
+          <div class="impact-visual">
+            <div class="impact-bar">
+              <div class="bar-fill" data-width="92"></div>
+            </div>
+            <div class="impact-number">92%</div>
+          </div>
+          <h3>Density Incident Reduction</h3>
+          <p>Critical density events (>5.5 persons/m²) reduced from <strong>~12 per event to &lt;1</strong> via predictive re-routing. Zero crowd-crush incidents across projected 200+ managed events per year.</p>
+          <div class="impact-baseline">
+            <span>Baseline: ~12 incidents</span>
+            <span>Target: &lt;1 incident</span>
+          </div>
+        </div>
+
+        <div class="impact-card">
+          <div class="impact-visual">
+            <div class="impact-bar">
+              <div class="bar-fill" data-width="40"></div>
+            </div>
+            <div class="impact-number">+28 pts</div>
+          </div>
+          <h3>Net Promoter Score</h3>
+          <p>Attendee NPS projected to increase from <strong>32 to 60+</strong> driven by shorter waits, personalized experience, seamless entry/exit, and gamification engagement. AR wayfinding alone contributes +8 NPS points in pilot surveys.</p>
+          <div class="impact-baseline">
+            <span>Baseline NPS: 32</span>
+            <span>Target NPS: 60+</span>
+          </div>
+        </div>
+
+        <div class="impact-card">
+          <div class="impact-visual">
+            <div class="impact-bar">
+              <div class="bar-fill" data-width="45"></div>
+            </div>
+            <div class="impact-number">3.2×</div>
+          </div>
+          <h3>Staff Efficiency</h3>
+          <p>Operations team handles <strong>3.2× more attendees per staff member</strong> via automated routing, AI anomaly triage, and app-based issue reporting. Manual radio coordination reduced <strong>70%</strong> — replaced by automated dispatch.</p>
+          <div class="impact-baseline">
+            <span>Baseline: 1:280 ratio</span>
+            <span>Target: 1:900 ratio</span>
+          </div>
+        </div>
+
+        <div class="impact-card">
+          <div class="impact-visual">
+            <div class="impact-bar">
+              <div class="bar-fill" data-width="53"></div>
+            </div>
+            <div class="impact-number">53%</div>
+          </div>
+          <h3>Egress Time Reduction</h3>
+          <p>Post-event venue clearance drops from <strong>75 min to 35 min</strong> through staggered exit waves synchronized with city transit. Parking lot clearance improved <strong>60%</strong> via zone-sequenced release.</p>
+          <div class="impact-baseline">
+            <span>Baseline: 75 min</span>
+            <span>Target: 35 min</span>
+          </div>
+        </div>
+
+        <div class="impact-card">
+          <div class="impact-visual">
+            <div class="impact-bar">
+              <div class="bar-fill" data-width="35"></div>
+            </div>
+            <div class="impact-number">+22%</div>
+          </div>
+          <h3>Revenue Per Attendee</h3>
+          <p>F&B revenue increases <strong>22%</strong> via pre-order convenience (higher order value) + AI-driven recommendations. Merchandise revenue up <strong>15%</strong> through personalized, location-aware promotions and reduced queue abandonment.</p>
+          <div class="impact-baseline">
+            <span>Baseline: $18/head</span>
+            <span>Target: $22/head</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Moonshot Feature -->
+  <section id="moonshot" class="section">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">07</span>
+        <h2>The Moonshot</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="moonshot-content">
+        <div class="moonshot-badge">
+          <span>🚀</span>
+          <span>WORLD FIRST</span>
+        </div>
+        <h3 class="moonshot-title">Crowd-Acoustic Sentiment Sonar</h3>
+        <div class="moonshot-body">
+          <div class="moonshot-description">
+            <p class="moonshot-lead">
+              Deploy a <strong>distributed microphone array</strong> (64 MEMS microphones per zone, 32 zones = 2,048 total) that performs real-time <strong>acoustic sentiment analysis</strong> of the crowd — without capturing intelligible speech.
+            </p>
+            <h4>How It Works</h4>
+            <p>
+              The system uses <strong>beamforming</strong> to isolate zone-level crowd audio, then processes it through a <strong>spectral emotion classifier</strong> (trained on 10,000+ hours of crowd audio from diverse sporting events). It doesn't transcribe words — it analyzes <strong>aggregate acoustic features</strong>: amplitude envelopes (excitement spikes), frequency distributions (cheers vs. boos vs. tension silence), rhythmic patterns (coordinated chanting vs. chaotic noise), and temporal dynamics (sudden drops indicating shock or concern).
+            </p>
+            <h4>What It Enables</h4>
+            <ul class="moonshot-list">
+              <li><strong>Real-Time Mood Map:</strong> The Nerve Center displays a live emotional heatmap — zones color-coded by crowd sentiment (elated, tense, frustrated, disengaged). Operators can see a "mood wave" propagate after a goal or controversial decision.</li>
+              <li><strong>Predictive Unrest Detection:</strong> A shift from "excitement" to "frustration + rising amplitude" in a specific zone triggers a preemptive security positioning alert — <strong>4–6 minutes before</strong> visible behavioral indicators emerge. This closes the gap between emotional escalation and physical response.</li>
+              <li><strong>Experience Optimization:</strong> DJ/music, screen content, and light shows adapt in real-time to crowd energy. If post-half-time energy dips, the system triggers a targeted engagement sequence. If a section's sentiment drops post-controversial call, a "fan cam" or replay is served to that section's screens.</li>
+              <li><strong>F&B Demand Forecasting:</strong> Acoustic analysis of frustration/agitation in specific zones correlates with increased concession demand. The system pre-alerts kitchen staff to prepare for surge orders from affected zones.</li>
+            </ul>
+            <h4>Why No One Has Done This Yet</h4>
+            <p>
+              Existing acoustic systems in stadiums are limited to <strong>decibel monitoring</strong> (simple SPL meters). The breakthrough here is applying <strong>environmental sound classification (ESC) models</strong> — specifically, PANNs (Pretrained Audio Neural Networks) fine-tuned for stadium acoustics — combined with <strong>beamforming arrays</strong> that can isolate individual zone audio from a 70,000-person environment. The privacy angle is solved: no speech is captured, only spectral features are extracted, and raw audio is discarded within 500ms of processing.
+            </p>
+          </div>
+          <div class="moonshot-specs">
+            <div class="spec-card">
+              <div class="spec-label">Array Size</div>
+              <div class="spec-value">2,048</div>
+              <div class="spec-unit">MEMS microphones</div>
+            </div>
+            <div class="spec-card">
+              <div class="spec-label">Latency</div>
+              <div class="spec-value">&lt;800</div>
+              <div class="spec-unit">ms sensor-to-insight</div>
+            </div>
+            <div class="spec-card">
+              <div class="spec-label">Sentiment Classes</div>
+              <div class="spec-value">7</div>
+              <div class="spec-unit">emotion categories</div>
+            </div>
+            <div class="spec-card">
+              <div class="spec-label">Privacy</div>
+              <div class="spec-value">Zero</div>
+              <div class="spec-unit">speech captured</div>
+            </div>
+            <div class="spec-card">
+              <div class="spec-label">Early Warning</div>
+              <div class="spec-value">4–6</div>
+              <div class="spec-unit">min before incident</div>
+            </div>
+            <div class="spec-card">
+              <div class="spec-label">Model</div>
+              <div class="spec-value">PANNs</div>
+              <div class="spec-unit">fine-tuned for stadia</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="18" stroke="url(#footGrad)" stroke-width="2" />
+            <circle cx="20" cy="20" r="10" stroke="url(#footGrad)" stroke-width="1.5" opacity="0.6" />
+            <circle cx="20" cy="20" r="3" fill="url(#footGrad)" />
+            <defs>
+              <linearGradient id="footGrad" x1="0" y1="0" x2="40" y2="40">
+                <stop offset="0%" stop-color="#00f0ff" />
+                <stop offset="100%" stop-color="#7b61ff" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span>FlowSphere</span>
+      </div>
+      <p class="footer-tagline">Intelligent Stadium Experience System — Designed by VenueIQ</p>
+      <div class="footer-meta">
+        <span>70,000 Seats • 2,400+ Sensors • Sub-3s Evacuation • Zero Crowd Crush</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
