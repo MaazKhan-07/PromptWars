@@ -8,8 +8,10 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          firebase: ['firebase/app', 'firebase/auth', 'firebase/database'],
+        manualChunks(id) {
+          if (id.includes('firebase')) {
+            return 'firebase';
+          }
         }
       }
     }
