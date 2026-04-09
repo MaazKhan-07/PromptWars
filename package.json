@@ -4,6 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "dev": "vite --force",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "jest"
   },
   "repository": {
@@ -13,7 +16,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/MaazKhan-07/PromptWars/issues"
   },

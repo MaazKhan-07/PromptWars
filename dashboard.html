@@ -57,14 +57,14 @@
       <div class="sidebar-column">
         <div class="card">
           <h2>Flow Points</h2>
-          <h1 style="font-size: 3rem; background: var(--grad-warm); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">240</h1>
+          <h1 style="font-size: 3rem; background: var(--grad-warm); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">240</h1>
           <p>Earn +50 points by entering within your recommended arrival window (6:15 PM - 6:30 PM).</p>
         </div>
       </div>
     </div>
   </main>
   <script type="module">
-    import { listenToAuthStatus } from './src/services/firebase.js';
+    import { listenToAuthStatus, logoutUser } from './src/services/firebase.js';
     listenToAuthStatus((user) => {
       if(!user) {
         window.location.href = 'index.html';
@@ -73,8 +73,8 @@
       }
     });
 
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      alert("Simulating sign out...");
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await logoutUser();
       window.location.href = 'index.html';
     });
   </script>

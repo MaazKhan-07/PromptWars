@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue, get } from "firebase/database";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
 
 // Mock Firebase Config for the project
 const firebaseConfig = {
@@ -98,11 +98,11 @@ export const listenToFirebaseData = (callback) => {
 export const loginWithGoogle = async () => {
   initFirebase();
   if (mockMode) {
-    return Promise.resolve({ user: { displayName: "Mock User", email: "mock@user.com" }});
+    return Promise.resolve({ displayName: "Maaz Khan", email: "demo@flowsphere.ai" });
   }
   try {
     const result = await signInWithPopup(auth, provider);
-    return result;
+    return result.user;
   } catch (error) {
     console.error("Error signing in", error);
     return null;
@@ -120,4 +120,13 @@ export const listenToAuthStatus = (callback) => {
   return onAuthStateChanged(auth, user => {
     callback(user);
   });
+};
+
+/**
+ * Sign Out
+ */
+export const logoutUser = async () => {
+  initFirebase();
+  if (mockMode) return Promise.resolve();
+  return signOut(auth);
 };

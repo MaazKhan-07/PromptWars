@@ -44,7 +44,6 @@ export const initMap = (elementId = MAP_ID, center = { lat: 40.7128, lng: -74.00
   mapInstance = new window.google.maps.Map(mapElement, {
     center,
     zoom: 16,
-    mapId: 'DEMO_MAP_ID', // Replaces styles in modern Google Maps API
     disableDefaultUI: true,
     zoomControl: true,
   });
@@ -91,6 +90,8 @@ export const updateMarkers = (locations) => {
       position: { lat: loc.lat, lng: loc.lng },
       map: mapInstance,
       title: loc.title,
+      // optimized: false is often used to prevent some rendering issues in dev
+      optimized: false
     });
     
     const infoWindow = new window.google.maps.InfoWindow({
