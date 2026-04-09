@@ -2,8 +2,11 @@
    FlowSphere — Interactive Application
    ======================================== */
 
-(function () {
-  'use strict';
+import { loadGoogleMaps, initMap, updateHeatmap, updateMarkers } from './src/services/googleMaps.js';
+import { listenToFirebaseData } from './src/services/firebase.js';
+import { renderWaitTimeBoard, renderAlertBanner, initAuthUI } from './src/components/ui.js';
+
+'use strict';
 
   // ─── Particle Canvas Background ───
   const canvas = document.getElementById('particle-canvas');
@@ -421,9 +424,37 @@
     footerMeta.appendChild(span);
   }
 
-  console.log(
-    '%c⚡ FlowSphere System Active',
-    'background: linear-gradient(135deg, #00f0ff, #7b61ff); color: #06080f; font-weight: bold; padding: 8px 16px; border-radius: 4px; font-size: 14px;'
-  );
+  // ─── AI Integrations ───
+  const initAppFeatures = async () => {
+    initAuthUI('auth-btn', 'auth-status-msg');
 
-})();
+    try {
+      // Intentionally passing an empty string avoids the hard API rejection 
+      // and instead shows the 'development purposes only' map which remains interactive.
+      const gmaps = await loadGoogleMaps("");
+      initMap('venue-map');
+    } catch(e) {
+      document.getElementById('venue-map').innerHTML = "<div style='color:white;text-align:center;padding:50px;'>Map service offline</div>";
+    }
+
+    listenToFirebaseData((data) => {
+      renderWaitTimeBoard('wait-time-board', data);
+      renderAlertBanner('alert-container', data.alerts);
+      
+      // Update map features if available
+      const heatData = [
+        { lat: 40.7128, lng: -74.006, weight: data.waitTimes["Gate A"] || 1 },
+        { lat: 40.7130, lng: -74.007, weight: data.waitTimes["Gate B"] || 1 }
+      ];
+      updateHeatmap(heatData);
+      
+      const markers = [
+        { lat: 40.7128, lng: -74.006, title: "Gate A", waitTime: data.waitTimes["Gate A"] },
+        { lat: 40.7130, lng: -74.007, title: "Gate B", waitTime: data.waitTimes["Gate B"] }
+      ];
+      updateMarkers(markers);
+    });
+  };
+
+  // Run initializers
+  setTimeout(initAppFeatures, 500);

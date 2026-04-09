@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlowSphere — Attendee Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .user-dashboard {
+      padding: 120px 2rem 4rem;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      min-height: 100vh;
+      color: white;
+    }
+    .user-header { margin-bottom: 2rem; }
+    .user-header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .user-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+    @media (max-width: 768px) { .user-grid { grid-template-columns: 1fr; } }
+    .card { background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-subtle); margin-bottom: 2rem; }
+    .card h2 { color: var(--cyan); margin-bottom: 1rem; }
+    
+    .nav-actions { display: flex; align-items: center; gap: 1rem; }
+  </style>
+</head>
+<body>
+  <nav id="main-nav" class="scrolled">
+    <div class="nav-brand">
+      <span class="brand-text">FlowSphere</span>
+    </div>
+    <div class="nav-actions">
+      <a href="index.html" class="nav-link">Back to Home</a>
+      <button id="logout-btn" class="btn-secondary">Sign Out</button>
+    </div>
+  </nav>
+
+  <main class="user-dashboard">
+    <div class="user-header">
+      <h1 id="welcome-msg">Welcome, Attendee</h1>
+      <p>Your personalized event portal</p>
+    </div>
+
+    <div class="user-grid">
+      <div class="main-column">
+        <div class="card">
+          <h2>Your Journey</h2>
+          <p><strong>Assigned Entry:</strong> Gate C (estimated wait: <span style="color: #00e676;">2 mins</span>)</p>
+          <p><strong>Seat Location:</strong> Section 114, Row F, Seat 12</p>
+        </div>
+        <div class="card">
+          <h2>Pre-Ordered Concessions</h2>
+          <p>You have no active orders. Skip the line by ordering directly to your seat!</p>
+          <button class="btn-primary" style="margin-top: 1rem;">Order Now</button>
+        </div>
+      </div>
+      <div class="sidebar-column">
+        <div class="card">
+          <h2>Flow Points</h2>
+          <h1 style="font-size: 3rem; background: var(--grad-warm); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">240</h1>
+          <p>Earn +50 points by entering within your recommended arrival window (6:15 PM - 6:30 PM).</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script type="module">
+    import { listenToAuthStatus } from './src/services/firebase.js';
+    listenToAuthStatus((user) => {
+      if(!user) {
+        window.location.href = 'index.html';
+      } else {
+        document.getElementById('welcome-msg').innerText = `Welcome, ${user.displayName}`;
+      }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      alert("Simulating sign out...");
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
