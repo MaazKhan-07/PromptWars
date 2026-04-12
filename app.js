@@ -1,7 +1,6 @@
 /* ========================================
    FlowSphere — Tabbed Application Controller
    ======================================== */
-import './styles.css';
 import { loadGoogleMaps, initMap, updateHeatmap, updateMarkers, drawFlowArrows, generateHeatmapData, generateFlowArrows, GATES, STADIUM_CENTER, CONCESSION_STALLS, renderDirections, clearDirections } from './src/services/googleMaps.js';
 import { listenToFirebaseData, loginWithGoogle, logoutUser, listenToAuthStatus, addOrder, getOrders, addIncident, updateGateStatus, getLoyaltyPoints, getPointsHistory, getNotifications, markNotificationRead, getRestrooms, getZones, callCloudFunction, setupFCM, sendTestNotification, saveUserPreferences, getUserPreferences } from './src/services/firebase.js';
 import { getCrowdIntelligence, getGateRecommendation, getSmartArrivalPlan, getDemandForecast, getRiskAssessment, getJourneyPlan } from './src/services/geminiAI.js';
