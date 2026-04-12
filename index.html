@@ -4,24 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FlowSphere — Intelligent Stadium Experience System</title>
-  <meta name="description" content="FlowSphere: A comprehensive AI-driven stadium experience platform for 70,000-seat venues. Real-time crowd intelligence, zero-wait experiences, and autonomous safety systems." />
+  <meta name="description" content="FlowSphere: AI-driven stadium experience platform for 70,000-seat venues. Real-time crowd intelligence, zero-wait experiences, and autonomous safety systems." />
+
+  <!-- Security Headers (Commented out during local dev for Vite HMR) -->
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://www.gstatic.com https://apis.google.com https://www.google.com https://www.google-analytics.com; connect-src 'self' ws: wss: https://*.googleapis.com https://*.firebaseio.com https://*.firebaseapp.com wss://*.firebaseio.com https://open-meteo.com https://api.open-meteo.com https://generativelanguage.googleapis.com; img-src 'self' data: https: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com https://ajax.googleapis.com https://www.gstatic.com; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://lookerstudio.google.com https://*.firebaseapp.com;" /> -->
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏟️</text></svg>" />
+
+  <!-- Resource Hints -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://maps.googleapis.com" />
+  <link rel="preconnect" href="https://www.gstatic.com" />
+  <link rel="dns-prefetch" href="https://firebaseio.com" />
+  <link rel="dns-prefetch" href="https://generativelanguage.googleapis.com" />
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <a href="#main-content" class="skip-link" tabindex="0">Skip to main content</a>
 
-  <div id="alert-container" style="position:fixed; top:80px; right:20px; z-index:1000;" aria-live="polite"></div>
-  <!-- Particle Canvas Background -->
-  <canvas id="particle-canvas"></canvas>
+  <!-- Global Notification Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-relevant="additions"></div>
 
-  <!-- Navigation -->
-  <nav id="main-nav">
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- NAVIGATION / APP SHELL                 -->
+  <!-- ═══════════════════════════════════════ -->
+  <nav id="main-nav" aria-label="Main navigation">
     <div class="nav-brand">
       <div class="brand-icon">
-        <svg viewBox="0 0 40 40" fill="none">
+        <svg viewBox="0 0 40 40" fill="none" width="32" height="32" aria-hidden="true">
           <circle cx="20" cy="20" r="18" stroke="url(#navGrad)" stroke-width="2" />
           <circle cx="20" cy="20" r="10" stroke="url(#navGrad)" stroke-width="1.5" opacity="0.6" />
           <circle cx="20" cy="20" r="3" fill="url(#navGrad)" />
@@ -39,932 +55,778 @@
       </div>
       <span class="brand-text">FlowSphere</span>
     </div>
-    <div class="nav-links">
-      <a href="#executive-summary" class="nav-link active" data-section="executive-summary">Overview</a>
-      <a href="#architecture" class="nav-link" data-section="architecture">Architecture</a>
-      <a href="#innovations" class="nav-link" data-section="innovations">Innovations</a>
-      <a href="#dimensions" class="nav-link" data-section="dimensions">Dimensions</a>
-      <a href="#roadmap" class="nav-link" data-section="roadmap">Roadmap</a>
-      <a href="#impact" class="nav-link" data-section="impact">Impact</a>
-      <a href="#moonshot" class="nav-link" data-section="moonshot">Moonshot</a>
+
+    <!-- Tab Navigation -->
+    <div class="tab-nav" role="tablist" aria-label="Application tabs" id="tab-nav">
+      <button role="tab" class="tab-btn active" id="tab-dashboard" aria-selected="true" aria-controls="panel-dashboard" data-tab="dashboard" tabindex="0">
+        <span class="tab-icon">🗺️</span>
+        <span class="tab-label">Live Dashboard</span>
+        <span class="tab-status-dot live" aria-hidden="true"></span>
+      </button>
+      <button role="tab" class="tab-btn" id="tab-gates" aria-selected="false" aria-controls="panel-gates" data-tab="gates" tabindex="-1">
+        <span class="tab-icon">⏱️</span>
+        <span class="tab-label">Gate Manager</span>
+        <span class="tab-status-dot live" aria-hidden="true"></span>
+      </button>
+      <button role="tab" class="tab-btn" id="tab-concessions" aria-selected="false" aria-controls="panel-concessions" data-tab="concessions" tabindex="-1">
+        <span class="tab-icon">🍔</span>
+        <span class="tab-label">Concessions</span>
+        <span class="tab-status-dot live" aria-hidden="true"></span>
+      </button>
+      <button role="tab" class="tab-btn" id="tab-safety" aria-selected="false" aria-controls="panel-safety" data-tab="safety" tabindex="-1">
+        <span class="tab-icon">🚨</span>
+        <span class="tab-label">Safety</span>
+        <span class="tab-status-dot live" aria-hidden="true"></span>
+      </button>
+      <button role="tab" class="tab-btn" id="tab-analytics" aria-selected="false" aria-controls="panel-analytics" data-tab="analytics" tabindex="-1">
+        <span class="tab-icon">📊</span>
+        <span class="tab-label">Analytics</span>
+        <span class="tab-status-dot" aria-hidden="true"></span>
+      </button>
+      <button role="tab" class="tab-btn" id="tab-attendee" aria-selected="false" aria-controls="panel-attendee" data-tab="attendee" tabindex="-1">
+        <span class="tab-icon">👤</span>
+        <span class="tab-label">Portal</span>
+        <span class="tab-status-dot" aria-hidden="true"></span>
+      </button>
+      <div class="tab-indicator" id="tab-indicator" aria-hidden="true"></div>
     </div>
-    <div class="nav-status" style="display: flex; align-items: center; gap: 15px;">
-      <div class="notification-wrapper" style="position: relative; cursor: pointer;">
-        <span id="bell-icon" style="font-size: 1.2rem;">🔔</span>
-        <span id="notif-badge" style="position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; font-size: 10px; width: 14px; height: 14px; text-align: center; display: none;">0</span>
-        <div id="notifications-dropdown" style="display: none; position: absolute; top: 30px; right: 0; background: var(--bg-card); width: 300px; border: 1px solid var(--border-subtle); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 1000; max-height: 300px; overflow-y: auto;">
-          <div style="padding: 10px; border-bottom: 1px solid var(--border-subtle); font-weight: bold; color: white;">Notifications</div>
-          <div id="notifications-list" style="padding: 5px;">
-            <div style="padding: 10px; color: var(--text-muted); font-size: 0.9rem;">No new notifications</div>
+
+    <!-- Right: Notifications + Auth + Dark Mode -->
+    <div class="nav-actions">
+      <button id="dark-mode-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span id="dark-mode-icon">🌙</span>
+      </button>
+      <div class="notification-wrapper">
+        <button id="bell-icon" class="icon-btn" aria-label="Notifications" aria-haspopup="true" aria-expanded="false">🔔</button>
+        <span id="notif-badge" class="notif-badge" aria-hidden="true">0</span>
+        <div id="notifications-dropdown" class="notifications-dropdown" role="menu" aria-label="Notifications panel" hidden>
+          <div class="dropdown-header">Notifications</div>
+          <div id="notifications-list" class="notifications-list">
+            <div class="notif-empty">No new notifications</div>
           </div>
         </div>
       </div>
-      <div id="auth-status-wrap" style="display: flex; align-items: center; gap: 10px; margin-left: 10px; border-left: 1px solid var(--border-subtle); padding-left: 15px;">
-        <button id="auth-btn" class="btn-primary" style="padding: 6px 12px; font-size: 0.85rem;" aria-label="Login">Sign In</button>
-        <div id="auth-status-msg" style="font-size: 0.85rem;" aria-live="polite"></div>
+      <div id="auth-status-wrap" class="auth-wrap">
+        <button id="auth-btn" class="btn-primary btn-sm" aria-label="Sign in with Google">Sign In</button>
+        <div id="user-avatar-wrap" class="user-avatar-wrap" hidden style="display: none; align-items: center; gap: 0.5rem;">
+          <img id="user-avatar" src="" alt="User avatar" class="user-avatar" width="32" height="32" loading="lazy" />
+          <span id="user-name" class="user-name"></span>
+          <button id="sign-out-btn" class="icon-btn" aria-label="Sign out" title="Sign out" style="color: var(--red); font-size: 1.1rem; padding: 4px;">🚪</button>
+        </div>
       </div>
-      <div style="display: flex; align-items: center; gap: 5px; margin-left: 5px; border-left: 1px solid var(--border-subtle); padding-left: 15px;">
-        <span class="status-dot"></span>
-        <span class="status-text">SYSTEM ACTIVE</span>
+      <div class="system-status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span class="status-text">LIVE</span>
       </div>
     </div>
   </nav>
 
+  <!-- Mobile Tab Scroll -->
+  <div class="mobile-tab-scroll" id="mobile-tab-scroll" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- MAIN CONTENT — TAB PANELS              -->
+  <!-- ═══════════════════════════════════════ -->
   <main id="main-content" role="main">
-  <!-- Hero Section -->
-  <header id="hero">
-    <div class="hero-content">
-      <div class="hero-badge">
-        <span class="badge-pulse"></span>
-        <span>NEXT-GEN STADIUM INTELLIGENCE</span>
-      </div>
-      <h1 class="hero-title">
-        <span class="title-line">Flow</span><span class="title-line accent">Sphere</span>
-      </h1>
-      <p class="hero-subtitle">
-        An end-to-end intelligent stadium experience system transforming 70,000-seat venues into living, breathing organisms that anticipate, adapt, and protect.
-      </p>
-      <div class="hero-stats">
-        <div class="stat-card">
-          <div class="stat-number" data-target="70000">0</div>
-          <div class="stat-label">Seats Managed</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" data-target="2400" data-suffix="+">0</div>
-          <div class="stat-label">IoT Sensors</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" data-target="3" data-suffix="s">0</div>
-          <div class="stat-label">Evacuation Compute</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" data-target="99.7" data-suffix="%" data-decimal="true">0</div>
-          <div class="stat-label">Uptime SLA</div>
-        </div>
-      </div>
-      <div class="hero-cta">
-        <a href="#executive-summary" class="btn-primary">Explore the System</a>
-        <a href="#architecture" class="btn-secondary">View Architecture</a>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="stadium-rings">
-        <div class="ring ring-1"></div>
-        <div class="ring ring-2"></div>
-        <div class="ring ring-3"></div>
-        <div class="ring ring-4"></div>
-        <div class="ring-center">
-          <svg viewBox="0 0 100 100" class="stadium-icon">
-            <ellipse cx="50" cy="50" rx="45" ry="30" stroke="url(#stadGrad)" stroke-width="1.5" fill="none" />
-            <ellipse cx="50" cy="50" rx="30" ry="18" stroke="url(#stadGrad)" stroke-width="1" fill="none" opacity="0.5" />
-            <rect x="20" y="40" width="60" height="20" rx="2" stroke="url(#stadGrad)" stroke-width="0.8" fill="none" opacity="0.3" />
-            <defs>
-              <linearGradient id="stadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#00f0ff" />
-                <stop offset="50%" stop-color="#7b61ff" />
-                <stop offset="100%" stop-color="#ff6b9d" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-      </div>
-    </div>
-  </header>
 
-  <!-- Live Dashboard Section -->
-  <section id="dashboard" class="section">
-    <div class="section-container">
-      <div class="section-header">
-        <span class="section-number">Live</span>
-        <h2>Venue Command Dashboard</h2>
-        <div class="section-line"></div>
+    <!-- ═══ TAB 1: LIVE DASHBOARD ═══ -->
+    <section role="tabpanel" id="panel-dashboard" class="tab-panel active" aria-labelledby="tab-dashboard">
+      <div class="panel-header">
+        <h1><span class="panel-icon">🗺️</span> Live Dashboard</h1>
+        <div class="panel-meta">
+          <span class="live-badge"><span class="pulse-dot"></span> LIVE</span>
+          <span id="dashboard-updated" class="last-updated">Updated just now</span>
+        </div>
       </div>
-      <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-        <div class="dashboard-map-panel">
-          <h3>Real-time Flow Map</h3>
-          <div id="venue-map" style="width: 100%; height: 400px; border-radius: 12px; background: #222;" aria-label="Interactive venue map" role="application">
-            <!-- Skeleton Loader -->
-            <div class="map-skeleton" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #888;">
-               Loading Map...
+      <div class="dashboard-layout">
+        <div class="dashboard-map-area">
+          <div id="venue-map" class="map-container" role="application" aria-label="Interactive crowd density map of Wankhede Stadium">
+            <div class="skeleton-map">
+              <div class="skeleton-shimmer"></div>
+              <span>Loading Map...</span>
             </div>
           </div>
         </div>
-        <div class="dashboard-wait-panel">
-          <h3>Live Wait Times</h3>
-          <div id="wait-time-board" aria-live="polite">
-            <div class="skeleton-row" style="height: 30px; background: rgba(255,255,255,0.1); margin-bottom: 10px; border-radius: 4px;"></div>
-            <div class="skeleton-row" style="height: 30px; background: rgba(255,255,255,0.1); margin-bottom: 10px; border-radius: 4px;"></div>
+        <div class="dashboard-sidebar">
+          <div class="sidebar-card">
+            <div class="sidebar-card-header"><span>👥</span> Live Crowd Count</div>
+            <div class="big-number" id="live-crowd-count">0</div>
+            <div class="sub-text">of 70,000 capacity</div>
+          </div>
+          <div class="sidebar-card">
+            <div class="sidebar-card-header"><span>🚨</span> Active Alerts</div>
+            <div class="big-number accent" id="active-alerts-count">0</div>
+          </div>
+          <div class="sidebar-card">
+            <div class="sidebar-card-header"><span>🏏</span> Current Phase</div>
+            <div id="match-phase" class="phase-display">Pre-Match</div>
+            <div class="phase-selector">
+              <button class="phase-btn active" data-phase="Pre-Match">Pre</button>
+              <button class="phase-btn" data-phase="Live">Live</button>
+              <button class="phase-btn" data-phase="Half-Time">Half</button>
+              <button class="phase-btn" data-phase="Post-Match">Post</button>
+            </div>
+          </div>
+          <div class="sidebar-card">
+            <div class="sidebar-card-header"><span>🌤️</span> Weather</div>
+            <div id="weather-widget" class="weather-widget">
+              <div class="skeleton-text"></div>
+            </div>
+          </div>
+          <div class="sidebar-card ai-card">
+            <div class="sidebar-card-header"><span>🧠</span> Crowd Intelligence</div>
+            <div id="ai-insight-dashboard" class="ai-insight-area" aria-live="assertive">
+              <p class="ai-placeholder">Click below for AI-powered crowd analysis</p>
+            </div>
+            <button id="btn-crowd-ai" class="btn-ai" aria-label="Get AI crowd intelligence insight">
+              <span class="btn-ai-icon">✨</span> Analyze Crowd
+              <span id="ai-cooldown-dashboard" class="cooldown-timer" hidden></span>
+            </button>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Executive Summary -->
-  <section id="executive-summary" class="section">
-    <div class="section-container">
-      <div class="section-header">
-        <span class="section-number">01</span>
-        <h2>Executive Summary</h2>
-        <div class="section-line"></div>
-      </div>
-      <div class="summary-grid">
-        <div class="summary-main">
-          <p class="summary-lead">
-            FlowSphere is an AI-native stadium operating system that fuses <strong>2,400+ IoT sensors</strong>, <strong>real-time computer vision</strong>, and <strong>predictive crowd dynamics models</strong> into a single unified platform — transforming a 70,000-seat venue from a passive concrete structure into an adaptive, intelligent environment.
-          </p>
-          <p class="summary-body">
-            By processing over <strong>12 terabytes of spatial data per match day</strong> through edge-compute nodes distributed across the venue, FlowSphere predicts crowd bottlenecks 15–20 minutes before they form, dynamically re-routes foot traffic via 380+ digital signage endpoints, and delivers sub-3-second emergency evacuation route computation for every stadium zone simultaneously.
-          </p>
-          <p class="summary-body">
-            The system eliminates the traditional trade-off between safety and experience: attendees enjoy <strong>65% shorter wait times</strong>, <strong>personalized AR wayfinding</strong>, and <strong>pre-order concession delivery</strong>, while operations teams gain a real-time nerve center with automated anomaly detection and city-level transit coordination.
-          </p>
-          <p class="summary-body">
-            FlowSphere doesn't just manage crowds — it orchestrates human flow as a <strong>living, breathing infrastructure layer</strong>, making every event safer, smoother, and more memorable.
-          </p>
-        </div>
-        <div class="summary-sidebar">
-          <div class="value-card">
-            <div class="value-icon">🧠</div>
-            <h3>Predictive</h3>
-            <p>Forecasts bottlenecks 15–20 min ahead using LSTM models trained on 500+ historical events</p>
-          </div>
-          <div class="value-card">
-            <div class="value-icon">⚡</div>
-            <h3>Real-Time</h3>
-            <p>Sub-200ms sensor-to-action latency via distributed edge computing mesh</p>
-          </div>
-          <div class="value-card">
-            <div class="value-icon">🛡️</div>
-            <h3>Resilient</h3>
-            <p>Operates fully offline through edge nodes with 4-hour autonomous battery backup</p>
-          </div>
-          <div class="value-card">
-            <div class="value-icon">🎯</div>
-            <h3>Personalized</h3>
-            <p>Individual journey optimization for 70,000 unique attendees simultaneously</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- System Architecture -->
-  <section id="architecture" class="section section-dark">
-    <div class="section-container">
-      <div class="section-header">
-        <span class="section-number">02</span>
-        <h2>System Architecture</h2>
-        <div class="section-line"></div>
-      </div>
-      <p class="arch-intro">FlowSphere operates as a four-layer stack, where each layer feeds the next in a continuous perception-reasoning-action loop running at 5 Hz across the entire venue.</p>
-      <div class="architecture-diagram">
-        <!-- Layer 1: Perception -->
-        <div class="arch-layer layer-perception" data-layer="perception">
-          <div class="layer-header">
-            <div class="layer-badge">L1</div>
-            <h3>Perception Layer</h3>
-            <span class="layer-tag">SENSE</span>
-          </div>
-          <div class="layer-content">
-            <div class="layer-nodes">
-              <div class="node">
-                <div class="node-icon">📷</div>
-                <span>CV Cameras<br/><small>800+ units, 4K @ 30fps</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">📡</div>
-                <span>LiDAR Arrays<br/><small>120 units, 3D point clouds</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">📱</div>
-                <span>BLE Beacons<br/><small>1,200+ mesh network</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🌡️</div>
-                <span>Environmental<br/><small>Temp, humidity, air quality</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🚪</div>
-                <span>Gate Sensors<br/><small>NFC/QR + pressure mats</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">📶</div>
-                <span>WiFi Probes<br/><small>Device density heatmaps</small></span>
-              </div>
-            </div>
-          </div>
-          <div class="data-flow-arrow">
-            <svg viewBox="0 0 40 30"><path d="M20 0 L20 20 M12 14 L20 22 L28 14" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            <span>12 TB / match day</span>
-          </div>
-        </div>
-
-        <!-- Layer 2: Intelligence -->
-        <div class="arch-layer layer-intelligence" data-layer="intelligence">
-          <div class="layer-header">
-            <div class="layer-badge">L2</div>
-            <h3>Intelligence Layer</h3>
-            <span class="layer-tag">THINK</span>
-          </div>
-          <div class="layer-content">
-            <div class="layer-nodes">
-              <div class="node">
-                <div class="node-icon">🔮</div>
-                <span>Crowd Predictor<br/><small>LSTM + Graph Neural Net</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🗺️</div>
-                <span>Flow Optimizer<br/><small>Multi-objective routing</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🚨</div>
-                <span>Anomaly Engine<br/><small>Autoencoder + rule-based</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">⏱️</div>
-                <span>Queue Estimator<br/><small>Bayesian wait-time model</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🧬</div>
-                <span>Digital Twin<br/><small>Full venue simulation</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🎯</div>
-                <span>Personalization<br/><small>Real-time preference ML</small></span>
-              </div>
-            </div>
-          </div>
-          <div class="data-flow-arrow">
-            <svg viewBox="0 0 40 30"><path d="M20 0 L20 20 M12 14 L20 22 L28 14" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            <span>Decisions @ 200ms</span>
-          </div>
-        </div>
-
-        <!-- Layer 3: Action -->
-        <div class="arch-layer layer-action" data-layer="action">
-          <div class="layer-header">
-            <div class="layer-badge">L3</div>
-            <h3>Action Layer</h3>
-            <span class="layer-tag">ACT</span>
-          </div>
-          <div class="layer-content">
-            <div class="layer-nodes">
-              <div class="node">
-                <div class="node-icon">🖥️</div>
-                <span>Digital Signage<br/><small>380+ dynamic displays</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">📲</div>
-                <span>Push System<br/><small>FCM + WebSocket real-time</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🚦</div>
-                <span>Gate Control<br/><small>Automated lane switching</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🔊</div>
-                <span>PA Override<br/><small>Zone-specific announcements</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">💡</div>
-                <span>LED Wayfinding<br/><small>Floor-embedded guidance</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">📊</div>
-                <span>Nerve Center<br/><small>Ops dashboard commands</small></span>
-              </div>
-            </div>
-          </div>
-          <div class="data-flow-arrow">
-            <svg viewBox="0 0 40 30"><path d="M20 0 L20 20 M12 14 L20 22 L28 14" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            <span>70K personalized touches</span>
-          </div>
-        </div>
-
-        <!-- Layer 4: Experience -->
-        <div class="arch-layer layer-experience" data-layer="experience">
-          <div class="layer-header">
-            <div class="layer-badge">L4</div>
-            <h3>Experience Layer</h3>
-            <span class="layer-tag">DELIGHT</span>
-          </div>
-          <div class="layer-content">
-            <div class="layer-nodes">
-              <div class="node">
-                <div class="node-icon">📱</div>
-                <span>FlowSphere App<br/><small>iOS + Android + PWA</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🔮</div>
-                <span>AR Wayfinding<br/><small>Camera-based navigation</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🍔</div>
-                <span>Pre-Order F&B<br/><small>Seat delivery + pickup</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🏆</div>
-                <span>Gamification<br/><small>Loyalty + congestion rewards</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">♿</div>
-                <span>Accessibility<br/><small>Adaptive routing + assist</small></span>
-              </div>
-              <div class="node">
-                <div class="node-icon">🎫</div>
-                <span>Smart Ticketing<br/><small>NFC + biometric fast-lane</small></span>
-              </div>
-            </div>
-          </div>
+    <!-- ═══ TAB 2: GATE & WAIT TIMES ═══ -->
+    <section role="tabpanel" id="panel-gates" class="tab-panel" aria-labelledby="tab-gates" hidden>
+      <div class="panel-header">
+        <h1><span class="panel-icon">⏱️</span> Gate & Wait Times Manager</h1>
+        <div class="panel-meta">
+          <span class="live-badge"><span class="pulse-dot"></span> LIVE</span>
+          <span id="gates-updated" class="last-updated">Updated just now</span>
         </div>
       </div>
 
-      <!-- Edge Computing Note -->
-      <div class="edge-note">
-        <div class="edge-icon">⚡</div>
-        <div class="edge-content">
-          <h4>Edge Computing Mesh</h4>
-          <p>32 ruggedized edge nodes (NVIDIA Jetson Orin) distributed across the venue provide <strong>sub-50ms local inference</strong>, operate autonomously during cloud outages, and sync state via a gossip protocol when connectivity resumes. Each node manages ~2,200 seats and carries 4 hours of battery backup.</p>
+      <div class="gate-grid" id="gate-grid" aria-live="polite">
+        <!-- Gate cards rendered by JS -->
+        <div class="skeleton-card" aria-hidden="true"><div class="skeleton-shimmer"></div></div>
+        <div class="skeleton-card" aria-hidden="true"><div class="skeleton-shimmer"></div></div>
+        <div class="skeleton-card" aria-hidden="true"><div class="skeleton-shimmer"></div></div>
+        <div class="skeleton-card" aria-hidden="true"><div class="skeleton-shimmer"></div></div>
+        <div class="skeleton-card" aria-hidden="true"><div class="skeleton-shimmer"></div></div>
+        <div class="skeleton-card" aria-hidden="true"><div class="skeleton-shimmer"></div></div>
+      </div>
+
+      <div class="gates-bottom-section">
+        <div class="chart-panel">
+          <h2>📈 Historical Wait Trends (Last 60 min)</h2>
+          <div id="wait-trend-chart" class="chart-container" role="img" aria-label="Line chart showing wait time trends for each gate over the last 60 minutes">
+            <div class="skeleton-chart"><div class="skeleton-shimmer"></div></div>
+          </div>
+        </div>
+
+        <div class="arrival-planner">
+          <h2>🧭 Smart Arrival Planner</h2>
+          <form id="arrival-form" class="planner-form" novalidate>
+            <div class="form-group">
+              <label for="seat-section-input">Seat Section</label>
+              <select id="seat-section-input" required>
+                <option value="">Select section...</option>
+                <option value="North Stand A">North Stand A</option>
+                <option value="North Stand B">North Stand B</option>
+                <option value="East Stand A">East Stand A</option>
+                <option value="East Stand B">East Stand B</option>
+                <option value="South Stand A">South Stand A</option>
+                <option value="South Stand B">South Stand B</option>
+                <option value="West Stand A">West Stand A</option>
+                <option value="West Stand B">West Stand B</option>
+                <option value="VIP Box">VIP Box</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="arrival-time-input">Planned Arrival Time</label>
+              <input type="time" id="arrival-time-input" required />
+            </div>
+            <button type="submit" class="btn-ai">
+              <span class="btn-ai-icon">✨</span> Get AI Recommendation
+              <span id="ai-cooldown-arrival" class="cooldown-timer" hidden></span>
+            </button>
+            <div id="arrival-result" class="ai-result-area" aria-live="assertive"></div>
+          </form>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- Top 5 Innovations -->
-  <section id="innovations" class="section">
-    <div class="section-container">
-      <div class="section-header">
-        <span class="section-number">03</span>
-        <h2>Top 5 Innovations</h2>
-        <div class="section-line"></div>
+      <!-- Admin Controls (visible after sign-in) -->
+      <div id="admin-controls" class="admin-panel" hidden>
+        <h2>🔐 Admin Controls</h2>
+        <p class="admin-note">Signed in as admin — you can manually control gate operations.</p>
+        <div class="admin-grid" id="admin-gate-controls">
+          <!-- Rendered by JS -->
+        </div>
       </div>
-      <p class="section-intro">What makes FlowSphere genuinely novel versus existing stadium technology — each backed by specific technical mechanisms.</p>
-      <div class="innovations-grid">
+    </section>
 
-        <div class="innovation-card" data-innovation="1">
-          <div class="innovation-number">01</div>
-          <div class="innovation-content">
-            <h3>Crowd Digital Twin with Predictive Replay</h3>
-            <p>Unlike passive CCTV monitoring, FlowSphere maintains a <strong>real-time digital twin</strong> of every concourse, gate, and stand — a physics-based agent simulation running 2,400 virtual pedestrians calibrated against live sensor data. This twin doesn't just mirror reality; it <strong>runs 15-minute fast-forward simulations every 30 seconds</strong>, testing 50+ "what-if" routing scenarios to find the optimal crowd distribution before congestion forms.</p>
-            <div class="innovation-tech">
-              <span class="tech-tag">Agent-Based Modeling</span>
-              <span class="tech-tag">Social Force Model</span>
-              <span class="tech-tag">Monte Carlo Simulation</span>
-            </div>
-          </div>
+    <!-- ═══ TAB 3: CONCESSIONS HUB ═══ -->
+    <section role="tabpanel" id="panel-concessions" class="tab-panel" aria-labelledby="tab-concessions" hidden>
+      <div class="panel-header">
+        <h1><span class="panel-icon">🍔</span> Concessions Hub</h1>
+        <div class="panel-meta">
+          <span class="live-badge"><span class="pulse-dot"></span> LIVE</span>
+          <span id="concessions-updated" class="last-updated">Updated just now</span>
         </div>
-
-        <div class="innovation-card" data-innovation="2">
-          <div class="innovation-number">02</div>
-          <div class="innovation-content">
-            <h3>Federated Crowd Sensing Without Tracking</h3>
-            <p>FlowSphere achieves <strong>individual-level flow optimization for 70,000 people without storing any personally identifiable data</strong>. Using a novel federated approach, the app generates <strong>anonymous trajectory tokens</strong> that expire every 90 seconds. The system groups tokens into flow cohorts (e.g., "North Stand, Row J–M, likely heading to Gate 3") and optimizes cohort-level routing. Privacy-by-design — no facial recognition, no persistent tracking.</p>
-            <div class="innovation-tech">
-              <span class="tech-tag">Federated Learning</span>
-              <span class="tech-tag">Differential Privacy</span>
-              <span class="tech-tag">Ephemeral Tokens</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="innovation-card" data-innovation="3">
-          <div class="innovation-number">03</div>
-          <div class="innovation-content">
-            <h3>Autonomous Evacuation Mesh</h3>
-            <p>Emergency evacuation routes are not pre-programmed — they are <strong>computed dynamically in under 3 seconds</strong> based on real-time occupancy, blocked paths, and incident location. The 32 edge nodes form a <strong>self-healing mesh</strong> that can partition into independent evacuation zones if network segments fail. Each node can independently drive its zone's signage, PA, and LED floor guides — no central server required.</p>
-            <div class="innovation-tech">
-              <span class="tech-tag">Dijkstra + Capacity Constraints</span>
-              <span class="tech-tag">Raft Consensus</span>
-              <span class="tech-tag">Edge Autonomy</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="innovation-card" data-innovation="4">
-          <div class="innovation-number">04</div>
-          <div class="innovation-content">
-            <h3>Behavioral Nudge Engine</h3>
-            <p>Rather than commanding attendees, FlowSphere <strong>nudges behavior</strong> using principles from behavioral economics. Dynamic signage shows <strong>social proof</strong> ("73% of fans in your section used Gate 5 — 4 min walk"), <strong>loss aversion</strong> ("Gate 2 wait increasing — save 8 min via Gate 7"), and <strong>gamified incentives</strong> (loyalty points for off-peak concession visits). A/B testing across signage zones continuously optimizes nudge effectiveness.</p>
-            <div class="innovation-tech">
-              <span class="tech-tag">Multi-Armed Bandit</span>
-              <span class="tech-tag">Behavioral Economics</span>
-              <span class="tech-tag">Contextual Nudging</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="innovation-card" data-innovation="5">
-          <div class="innovation-number">05</div>
-          <div class="innovation-content">
-            <h3>City-Scale Dispersal Orchestration</h3>
-            <p>FlowSphere extends beyond stadium walls. Post-event, it <strong>coordinates with city transit APIs</strong> (Google Maps Platform, local metro/bus GTFS feeds) to stagger exit waves synchronized with train departures and traffic signal timing. The system generates <strong>personalized departure windows</strong> for each attendee based on their transport mode, parking location, and destination — reducing post-event clearance time from 75+ minutes to under 35 minutes.</p>
-            <div class="innovation-tech">
-              <span class="tech-tag">GTFS-RT Integration</span>
-              <span class="tech-tag">Traffic Signal API</span>
-              <span class="tech-tag">Staggered Egress</span>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </div>
-  </section>
 
-  <!-- 5 Dimensions -->
-  <section id="dimensions" class="section section-dark">
-    <div class="section-container">
-      <div class="section-header">
-        <span class="section-number">04</span>
-        <h2>Five Dimensions</h2>
-        <div class="section-line"></div>
-      </div>
-      <div class="dimensions-tabs">
-        <button class="dim-tab active" data-dim="crowd">
-          <span class="dim-tab-icon">🧠</span>
-          <span>Crowd Intelligence</span>
-        </button>
-        <button class="dim-tab" data-dim="wait">
-          <span class="dim-tab-icon">⚡</span>
-          <span>Zero Wait</span>
-        </button>
-        <button class="dim-tab" data-dim="coord">
-          <span class="dim-tab-icon">🎛️</span>
-          <span>Coordination</span>
-        </button>
-        <button class="dim-tab" data-dim="exp">
-          <span class="dim-tab-icon">✨</span>
-          <span>Experience</span>
-        </button>
-        <button class="dim-tab" data-dim="safety">
-          <span class="dim-tab-icon">🛡️</span>
-          <span>Safety</span>
-        </button>
-      </div>
-      <div class="dimensions-content">
-
-        <div class="dim-panel active" id="dim-crowd">
-          <div class="dim-grid">
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">📷</span>
-                <h4>Real-Time Density Mapping</h4>
-              </div>
-              <p>800+ CV cameras + 120 LiDAR arrays produce a <strong>unified 3D occupancy grid</strong> updated at 5 Hz. Each 2m×2m cell in the venue reports a density value (persons/m²) with color coding: <span class="color-green">Green (&lt;2)</span>, <span class="color-yellow">Yellow (2–4)</span>, <span class="color-orange">Orange (4–5.5)</span>, <span class="color-red">Red (&gt;5.5, crush risk)</span>. YOLOv8-based person detection runs entirely on edge nodes — no images leave the venue.</p>
-            </div>
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">🔮</span>
-                <h4>Predictive Flow Modeling</h4>
-              </div>
-              <p>An <strong>LSTM encoder-decoder</strong> trained on 500+ historical match-day datasets predicts local crowd density 15–20 minutes into the future. The model ingests current density maps, match-state signals (innings break, final over), time-of-day, weather, and team-specific fan behavior profiles. Prediction accuracy: <strong>87% within ±0.5 persons/m²</strong> at the 15-minute horizon.</p>
-            </div>
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">🖥️</span>
-                <h4>Dynamic Digital Signage</h4>
-              </div>
-              <p>380+ smart displays across concourses show <strong>real-time path recommendations</strong> with color-coded urgency. Each display runs a localized routing algorithm that considers: current path density, predicted density at destination, attendee walking speed distributions, and available capacity at alternative routes. Signage updates every <strong>10 seconds</strong> during high-density periods.</p>
+      <div class="concessions-layout">
+        <div class="concessions-main">
+          <!-- Concession Map -->
+          <div class="concession-map-wrap">
+            <h2>🗺️ Concession Map</h2>
+            <div id="concession-map" class="map-container map-sm" role="application" aria-label="Map showing food stalls, restrooms, and merchandise locations">
+              <div class="skeleton-map"><div class="skeleton-shimmer"></div><span>Loading Map...</span></div>
             </div>
           </div>
-        </div>
 
-        <div class="dim-panel" id="dim-wait">
-          <div class="dim-grid">
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">⏱️</span>
-                <h4>AI Queue Prediction</h4>
+          <!-- Pre-Order System -->
+          <div class="preorder-section">
+            <h2>🛒 Pre-Order System</h2>
+            <form id="preorder-form" class="preorder-form" novalidate>
+              <div class="form-group">
+                <label for="preorder-section">Your Seat Section</label>
+                <select id="preorder-section" required>
+                  <option value="">Select section...</option>
+                  <option value="North Stand A">North Stand A</option>
+                  <option value="North Stand B">North Stand B</option>
+                  <option value="East Stand A">East Stand A</option>
+                  <option value="East Stand B">East Stand B</option>
+                  <option value="South Stand A">South Stand A</option>
+                  <option value="South Stand B">South Stand B</option>
+                  <option value="West Stand A">West Stand A</option>
+                  <option value="West Stand B">West Stand B</option>
+                </select>
               </div>
-              <p>Overhead cameras at each concession stand, restroom block, and merchandise zone feed a <strong>Bayesian queue-length estimator</strong> that predicts wait time ±45 seconds. Wait times display on the FlowSphere app, nearby digital signage, and venue-wide availability maps. The model accounts for service rate variability (e.g., complex food orders vs. drinks-only) and automatically redistributes demand by promoting under-utilized outlets.</p>
-            </div>
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">🍔</span>
-                <h4>Pre-Order Concessions</h4>
-              </div>
-              <p>Attendees pre-order F&B from their seat via the app. The system assigns a <strong>GPS-accurate delivery slot</strong> (±3 min window) based on kitchen capacity, delivery runner proximity, and the attendee's seat location. Runners use optimized multi-drop routes. Result: <strong>zero queue time</strong> for pre-orders, and 40% reduction in concourse congestion at food zones.</p>
-            </div>
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">🎫</span>
-                <h4>Smart Entry Staggering</h4>
-              </div>
-              <p>Tickets include a <strong>recommended arrival window</strong> (e.g., "Gate 3, 6:15–6:30 PM") computed to distribute entry load evenly across all gates and time slots. NFC/QR biometric fast-lanes process <strong>25 attendees/minute/lane</strong> vs. 8/min for manual scanning. Early and on-time arrivals earn loyalty points — reducing gate-surge incidents by <strong>78%</strong>.</p>
-            </div>
-          </div>
-        </div>
 
-        <div class="dim-panel" id="dim-coord">
-          <div class="dim-grid">
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">🎛️</span>
-                <h4>Nerve Center Dashboard</h4>
-              </div>
-              <p>A <strong>wall-mounted 12-screen command center</strong> gives venue ops, security, medical, and fire safety teams a unified real-time view. Features include: live density heatmap, active anomaly alerts with severity tiers, staff GPS positions, gate throughput graphs, emergency protocol triggers, and multi-agency radio integration. All decisions are logged for post-event audit.</p>
-            </div>
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">📲</span>
-                <h4>Two-Way Communication</h4>
-              </div>
-              <p>The FlowSphere app pushes <strong>three types of messages</strong>: (1) personalized route nudges based on predicted congestion, (2) venue-wide announcements (rain delay, schedule change), and (3) emergency broadcasts with evacuation instructions. Attendees can <strong>report issues</strong> (spill, broken seat, safety concern) via app — automatically routed to the nearest relevant staff member with GPS coordinates.</p>
-            </div>
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">🚗</span>
-                <h4>City Transit Integration</h4>
-              </div>
-              <p>Pre-event: FlowSphere ingests Google Maps traffic data and local transit GTFS-RT feeds to recommend <strong>optimal arrival routes and transport modes</strong> in the app. Post-event: coordinates exit waves with metro train schedules (200-person batches timed to departures) and signals traffic management agencies to adjust signal timing on arterial roads within a 2km radius.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="dim-panel" id="dim-exp">
-          <div class="dim-grid">
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">🗺️</span>
-                <h4>Personalized In-App Journey</h4>
-              </div>
-              <p>The app learns preferences across visits. It recommends <strong>seat upgrades</strong> when occupancy patterns allow, suggests F&B based on past orders, shows <strong>nearest available restrooms</strong> with live wait times, and offers AR camera-based wayfinding that overlays directional arrows on the real-world view. Every interaction is optimized for minimal screen time — most nudges are single-tap actions.</p>
-            </div>
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">♿</span>
-                <h4>Accessibility-First Design</h4>
-              </div>
-              <p>Dedicated routing engine for wheelchair users, elderly attendees, and those with visual/hearing impairments. Features: <strong>step-free path computation</strong>, larger font/high-contrast app mode, haptic navigation vibrations, companion-mode (share location with caretaker), priority queue access at all concessions, and <strong>accessible restroom availability</strong> with real-time occupancy.</p>
-            </div>
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">🏆</span>
-                <h4>Gamification & Loyalty</h4>
-              </div>
-              <p>Attendees earn <strong>"Flow Points"</strong> for congestion-reducing behaviors: arriving in their recommended window (+50 pts), using off-peak concession times (+30 pts), choosing less-crowded gates (+20 pts). Points redeem for seat upgrades, F&B discounts, merchandise, and exclusive meet-and-greet entries. Leaderboards by section create friendly competition. Result: <strong>23% voluntary shift to off-peak behaviors</strong>.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="dim-panel" id="dim-safety">
-          <div class="dim-grid">
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">🚨</span>
-                <h4>Automated Evacuation</h4>
-              </div>
-              <p>On emergency trigger, the system computes <strong>zone-specific evacuation routes in &lt;3 seconds</strong> using a modified Dijkstra algorithm with real-time capacity constraints. Routes account for: current occupancy per path, blocked exits, mobility-impaired attendee locations, and contra-flow patterns. Digital signage, LED floor strips, and PA switch to evacuation mode simultaneously. <strong>Full venue clearance target: 8 minutes.</strong></p>
-            </div>
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">🔍</span>
-                <h4>Anomaly Detection</h4>
-              </div>
-              <p>A convolutional autoencoder trained on normal crowd patterns flags anomalies: <strong>sudden density spikes</strong> (crush risk), <strong>counter-flow movement</strong> (potential stampede), <strong>restricted zone incursion</strong>, and <strong>abandoned objects</strong>. Alerts escalate through three tiers: (1) operations team notification, (2) security dispatch with GPS coordinates, (3) automatic PA zone-lock + command center alarm. False positive rate: <strong>&lt;2%</strong> after 6-month calibration period.</p>
-            </div>
-            <div class="dim-feature">
-              <div class="feature-header">
-                <span class="feature-icon">🔌</span>
-                <h4>Offline-First Edge Computing</h4>
-              </div>
-              <p>32 <strong>NVIDIA Jetson Orin</strong> edge nodes form a gossip-protocol mesh. Each node stores a local copy of the venue graph, ML models, and signage content. During cloud outage, nodes <strong>autonomously manage their zone</strong> (2,200 seats each) — running inference, driving displays, and coordinating with adjacent nodes. When connectivity resumes, state synchronization via CRDT-based merge ensures zero data loss.</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Implementation Roadmap -->
-  <section id="roadmap" class="section">
-    <div class="section-container">
-      <div class="section-header">
-        <span class="section-number">05</span>
-        <h2>Implementation Roadmap</h2>
-        <div class="section-line"></div>
-      </div>
-      <div class="roadmap-timeline">
-        <!-- Phase 1 -->
-        <div class="roadmap-phase">
-          <div class="phase-marker">
-            <div class="phase-dot"></div>
-            <div class="phase-line"></div>
-          </div>
-          <div class="phase-content">
-            <div class="phase-header">
-              <span class="phase-label">PHASE 1</span>
-              <h3>Pre-Event (T-90 to T-1 days)</h3>
-            </div>
-            <div class="phase-items">
-              <div class="phase-item">
-                <div class="item-week">T-90d</div>
-                <div class="item-detail">
-                  <h4>Sensor Deployment & Calibration</h4>
-                  <p>Install and calibrate all 2,400+ IoT sensors. LiDAR alignment with venue CAD model. CV camera field-of-view mapping and overlap verification. Environmental sensor baseline readings.</p>
+              <div class="menu-grid" id="menu-grid">
+                <!-- 8 menu items -->
+                <div class="menu-item" data-item="Vada Pav" data-price="80" data-category="food">
+                  <div class="menu-emoji">🍔</div>
+                  <div class="menu-name">Vada Pav</div>
+                  <div class="menu-price">₹80</div>
+                  <div class="menu-category">Street Food</div>
+                  <div class="qty-control">
+                    <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+                    <span class="qty-value" data-qty="0">0</span>
+                    <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+                <div class="menu-item" data-item="Chicken Biryani" data-price="250" data-category="food">
+                  <div class="menu-emoji">🍛</div>
+                  <div class="menu-name">Chicken Biryani</div>
+                  <div class="menu-price">₹250</div>
+                  <div class="menu-category">Main Course</div>
+                  <div class="qty-control">
+                    <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+                    <span class="qty-value" data-qty="0">0</span>
+                    <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+                <div class="menu-item" data-item="Masala Chai" data-price="40" data-category="beverage">
+                  <div class="menu-emoji">☕</div>
+                  <div class="menu-name">Masala Chai</div>
+                  <div class="menu-price">₹40</div>
+                  <div class="menu-category">Hot Drink</div>
+                  <div class="qty-control">
+                    <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+                    <span class="qty-value" data-qty="0">0</span>
+                    <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+                <div class="menu-item" data-item="Cold Coffee" data-price="120" data-category="beverage">
+                  <div class="menu-emoji">🥤</div>
+                  <div class="menu-name">Cold Coffee</div>
+                  <div class="menu-price">₹120</div>
+                  <div class="menu-category">Cold Drink</div>
+                  <div class="qty-control">
+                    <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+                    <span class="qty-value" data-qty="0">0</span>
+                    <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+                <div class="menu-item" data-item="Samosa" data-price="60" data-category="food">
+                  <div class="menu-emoji">🥟</div>
+                  <div class="menu-name">Samosa (2 pcs)</div>
+                  <div class="menu-price">₹60</div>
+                  <div class="menu-category">Snack</div>
+                  <div class="qty-control">
+                    <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+                    <span class="qty-value" data-qty="0">0</span>
+                    <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+                <div class="menu-item" data-item="Popcorn Large" data-price="150" data-category="snack">
+                  <div class="menu-emoji">🍿</div>
+                  <div class="menu-name">Popcorn (Large)</div>
+                  <div class="menu-price">₹150</div>
+                  <div class="menu-category">Snack</div>
+                  <div class="qty-control">
+                    <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+                    <span class="qty-value" data-qty="0">0</span>
+                    <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+                <div class="menu-item" data-item="Kulfi Stick" data-price="90" data-category="dessert">
+                  <div class="menu-emoji">🍦</div>
+                  <div class="menu-name">Kulfi Stick</div>
+                  <div class="menu-price">₹90</div>
+                  <div class="menu-category">Dessert</div>
+                  <div class="qty-control">
+                    <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+                    <span class="qty-value" data-qty="0">0</span>
+                    <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+                <div class="menu-item" data-item="Fresh Lime Soda" data-price="70" data-category="beverage">
+                  <div class="menu-emoji">🧃</div>
+                  <div class="menu-name">Fresh Lime Soda</div>
+                  <div class="menu-price">₹70</div>
+                  <div class="menu-category">Cold Drink</div>
+                  <div class="qty-control">
+                    <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+                    <span class="qty-value" data-qty="0">0</span>
+                    <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                  </div>
                 </div>
               </div>
-              <div class="phase-item">
-                <div class="item-week">T-60d</div>
-                <div class="item-detail">
-                  <h4>ML Model Training & Digital Twin Setup</h4>
-                  <p>Train crowd prediction LSTM on 500+ historical datasets. Calibrate agent-based simulation against venue geometry. Load-test anomaly detection autoencoder. Validate queue prediction accuracy with simulated crowds.</p>
-                </div>
+
+              <div class="cart-summary" id="cart-summary">
+                <div class="cart-total">Total: <strong id="cart-total-amount">₹0</strong></div>
+                <button type="submit" class="btn-primary" id="submit-order-btn" disabled>Place Order</button>
               </div>
-              <div class="phase-item">
-                <div class="item-week">T-30d</div>
-                <div class="item-detail">
-                  <h4>Integration Testing & Dry Runs</h4>
-                  <p>Full system integration test with 5,000 volunteer attendees. Stress-test edge mesh failover. Validate evacuation route computation under simulated outages. PA + signage + app coordination drills. City transit API handshake verification.</p>
-                </div>
-              </div>
-              <div class="phase-item">
-                <div class="item-week">T-7d</div>
-                <div class="item-detail">
-                  <h4>Staff Training & Operational Readiness</h4>
-                  <p>Nerve Center operator training (16 hours). Security team anomaly response protocols. Medical team integration walkthrough. Emergency evacuation full-venue drill. App push to ticket holders with arrival window assignments.</p>
-                </div>
-              </div>
-            </div>
+              <div id="order-status-msg" class="form-status" aria-live="polite"></div>
+            </form>
           </div>
         </div>
 
-        <!-- Phase 2 -->
-        <div class="roadmap-phase">
-          <div class="phase-marker">
-            <div class="phase-dot active"></div>
-            <div class="phase-line"></div>
-          </div>
-          <div class="phase-content">
-            <div class="phase-header">
-              <span class="phase-label phase-active">PHASE 2</span>
-              <h3>Day of Event (T-4 hours to T+2 hours)</h3>
-            </div>
-            <div class="phase-items">
-              <div class="phase-item">
-                <div class="item-week">T-4h</div>
-                <div class="item-detail">
-                  <h4>System Activation</h4>
-                  <p>Boot all edge nodes. Initialize digital twin with empty venue state. Activate all sensor streams. Verify end-to-end data pipeline. Enable Nerve Center displays. Begin city traffic monitoring for inbound crowd estimation.</p>
-                </div>
-              </div>
-              <div class="phase-item">
-                <div class="item-week">T-2h</div>
-                <div class="item-detail">
-                  <h4>Ingress Management</h4>
-                  <p>Staggered entry begins. Real-time gate load balancing. Dynamic lane allocation (fast-lane vs. standard). Push notifications to attendees approaching wrong gates. Live density monitoring on all concourses. Pre-order F&B window assignments begin.</p>
-                </div>
-              </div>
-              <div class="phase-item">
-                <div class="item-week">T+0</div>
-                <div class="item-detail">
-                  <h4>Live Event Operations</h4>
-                  <p>Continuous crowd prediction (15-min horizon). Break-time congestion management (innings interval routing). Queue optimization across all concessions. Anomaly detection active. AR wayfinding serving requests. Gamification points tracking live.</p>
-                </div>
-              </div>
-              <div class="phase-item">
-                <div class="item-week">T+end</div>
-                <div class="item-detail">
-                  <h4>Egress Orchestration</h4>
-                  <p>Staggered egress wave activation (5 waves, 3-min intervals). Metro departure synchronization. Traffic signal coordination within 2km radius. Personalized departure notifications. Parking zone exit sequencing. Real-time dispersal monitoring until venue clears below 5% occupancy.</p>
-                </div>
-              </div>
+        <div class="concessions-side">
+          <!-- Order Queue -->
+          <div class="order-queue-panel">
+            <h2>📋 Active Orders</h2>
+            <div id="order-queue" class="order-queue" aria-live="polite">
+              <p class="empty-state">No active orders yet</p>
             </div>
           </div>
-        </div>
 
-        <!-- Phase 3 -->
-        <div class="roadmap-phase">
-          <div class="phase-marker">
-            <div class="phase-dot"></div>
-          </div>
-          <div class="phase-content">
-            <div class="phase-header">
-              <span class="phase-label">PHASE 3</span>
-              <h3>Post-Event Analytics (T+1 to T+14 days)</h3>
+          <!-- Restroom Availability -->
+          <div class="restroom-panel">
+            <h2>🚻 Restroom Availability</h2>
+            <div id="restroom-grid" class="restroom-grid" aria-live="polite">
+              <!-- Rendered by JS -->
             </div>
-            <div class="phase-items">
-              <div class="phase-item">
-                <div class="item-week">T+1d</div>
-                <div class="item-detail">
-                  <h4>Event Debrief Report</h4>
-                  <p>Automated generation of comprehensive event report: peak density zones, bottleneck incidents, anomaly log, staff response times, evacuation drill metrics, F&B performance, app engagement rates. Delivered to operations team within 24 hours.</p>
-                </div>
-              </div>
-              <div class="phase-item">
-                <div class="item-week">T+3d</div>
-                <div class="item-detail">
-                  <h4>Model Retraining & Parameter Tuning</h4>
-                  <p>Feed event data into LSTM retraining pipeline. Update anomaly detection thresholds based on false positive/negative analysis. Recalibrate queue estimation Bayesian priors. Update digital twin with any venue modifications.</p>
-                </div>
-              </div>
-              <div class="phase-item">
-                <div class="item-week">T+7d</div>
-                <div class="item-detail">
-                  <h4>Continuous Improvement Cycle</h4>
-                  <p>A/B test results from nudge engine compiled. Signage effectiveness scoring. Attendee NPS survey integration. Behavioral shift analysis (gamification impact). Prepare optimization recommendations for next event. Update arrival window algorithms.</p>
-                </div>
-              </div>
+          </div>
+
+          <!-- AI Demand Forecasting -->
+          <div class="ai-forecast-panel">
+            <h2>🤖 AI Demand Forecast</h2>
+            <div id="ai-forecast" class="ai-insight-area" aria-live="assertive">
+              <p class="ai-placeholder">Generate AI-powered demand predictions</p>
+            </div>
+            <button id="btn-demand-ai" class="btn-ai">
+              <span class="btn-ai-icon">✨</span> Forecast Demand
+              <span id="ai-cooldown-demand" class="cooldown-timer" hidden></span>
+            </button>
+            <div id="forecast-actions" class="forecast-actions" hidden>
+              <button class="btn-accept">✅ Accept & Alert Kitchen</button>
+              <button class="btn-dismiss">❌ Dismiss</button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Measurable Impact -->
-  <section id="impact" class="section section-dark">
-    <div class="section-container">
-      <div class="section-header">
-        <span class="section-number">06</span>
-        <h2>Measurable Impact</h2>
-        <div class="section-line"></div>
-      </div>
-      <p class="section-intro">Projected improvements based on simulation modeling, comparable deployments at 30,000-seat pilot venues, and published crowd dynamics research.</p>
-      <div class="impact-grid">
-        <div class="impact-card">
-          <div class="impact-visual">
-            <div class="impact-bar">
-              <div class="bar-fill" data-width="65"></div>
-            </div>
-            <div class="impact-number">65%</div>
-          </div>
-          <h3>Wait Time Reduction</h3>
-          <p>Average concession wait drops from <strong>14 min to 5 min</strong> through AI queue balancing + pre-orders. Restroom wait reduced <strong>50%</strong> via real-time availability routing.</p>
-          <div class="impact-baseline">
-            <span>Baseline: 14 min avg</span>
-            <span>Target: 5 min avg</span>
-          </div>
-        </div>
-
-        <div class="impact-card">
-          <div class="impact-visual">
-            <div class="impact-bar">
-              <div class="bar-fill" data-width="92"></div>
-            </div>
-            <div class="impact-number">92%</div>
-          </div>
-          <h3>Density Incident Reduction</h3>
-          <p>Critical density events (>5.5 persons/m²) reduced from <strong>~12 per event to &lt;1</strong> via predictive re-routing. Zero crowd-crush incidents across projected 200+ managed events per year.</p>
-          <div class="impact-baseline">
-            <span>Baseline: ~12 incidents</span>
-            <span>Target: &lt;1 incident</span>
-          </div>
-        </div>
-
-        <div class="impact-card">
-          <div class="impact-visual">
-            <div class="impact-bar">
-              <div class="bar-fill" data-width="40"></div>
-            </div>
-            <div class="impact-number">+28 pts</div>
-          </div>
-          <h3>Net Promoter Score</h3>
-          <p>Attendee NPS projected to increase from <strong>32 to 60+</strong> driven by shorter waits, personalized experience, seamless entry/exit, and gamification engagement. AR wayfinding alone contributes +8 NPS points in pilot surveys.</p>
-          <div class="impact-baseline">
-            <span>Baseline NPS: 32</span>
-            <span>Target NPS: 60+</span>
-          </div>
-        </div>
-
-        <div class="impact-card">
-          <div class="impact-visual">
-            <div class="impact-bar">
-              <div class="bar-fill" data-width="45"></div>
-            </div>
-            <div class="impact-number">3.2×</div>
-          </div>
-          <h3>Staff Efficiency</h3>
-          <p>Operations team handles <strong>3.2× more attendees per staff member</strong> via automated routing, AI anomaly triage, and app-based issue reporting. Manual radio coordination reduced <strong>70%</strong> — replaced by automated dispatch.</p>
-          <div class="impact-baseline">
-            <span>Baseline: 1:280 ratio</span>
-            <span>Target: 1:900 ratio</span>
-          </div>
-        </div>
-
-        <div class="impact-card">
-          <div class="impact-visual">
-            <div class="impact-bar">
-              <div class="bar-fill" data-width="53"></div>
-            </div>
-            <div class="impact-number">53%</div>
-          </div>
-          <h3>Egress Time Reduction</h3>
-          <p>Post-event venue clearance drops from <strong>75 min to 35 min</strong> through staggered exit waves synchronized with city transit. Parking lot clearance improved <strong>60%</strong> via zone-sequenced release.</p>
-          <div class="impact-baseline">
-            <span>Baseline: 75 min</span>
-            <span>Target: 35 min</span>
-          </div>
-        </div>
-
-        <div class="impact-card">
-          <div class="impact-visual">
-            <div class="impact-bar">
-              <div class="bar-fill" data-width="35"></div>
-            </div>
-            <div class="impact-number">+22%</div>
-          </div>
-          <h3>Revenue Per Attendee</h3>
-          <p>F&B revenue increases <strong>22%</strong> via pre-order convenience (higher order value) + AI-driven recommendations. Merchandise revenue up <strong>15%</strong> through personalized, location-aware promotions and reduced queue abandonment.</p>
-          <div class="impact-baseline">
-            <span>Baseline: $18/head</span>
-            <span>Target: $22/head</span>
-          </div>
+    <!-- ═══ TAB 4: SAFETY & ALERTS ═══ -->
+    <section role="tabpanel" id="panel-safety" class="tab-panel" aria-labelledby="tab-safety" hidden>
+      <div class="panel-header">
+        <h1><span class="panel-icon">🚨</span> Safety & Alerts Command</h1>
+        <div class="panel-meta">
+          <span class="live-badge"><span class="pulse-dot"></span> LIVE</span>
+          <span id="safety-updated" class="last-updated">Updated just now</span>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- Moonshot Feature -->
-  <section id="moonshot" class="section">
-    <div class="section-container">
-      <div class="section-header">
-        <span class="section-number">07</span>
-        <h2>The Moonshot</h2>
-        <div class="section-line"></div>
-      </div>
-      <div class="moonshot-content">
-        <div class="moonshot-badge">
-          <span>🚀</span>
-          <span>WORLD FIRST</span>
-        </div>
-        <h3 class="moonshot-title">Crowd-Acoustic Sentiment Sonar</h3>
-        <div class="moonshot-body">
-          <div class="moonshot-description">
-            <p class="moonshot-lead">
-              Deploy a <strong>distributed microphone array</strong> (64 MEMS microphones per zone, 32 zones = 2,048 total) that performs real-time <strong>acoustic sentiment analysis</strong> of the crowd — without capturing intelligible speech.
-            </p>
-            <h4>How It Works</h4>
-            <p>
-              The system uses <strong>beamforming</strong> to isolate zone-level crowd audio, then processes it through a <strong>spectral emotion classifier</strong> (trained on 10,000+ hours of crowd audio from diverse sporting events). It doesn't transcribe words — it analyzes <strong>aggregate acoustic features</strong>: amplitude envelopes (excitement spikes), frequency distributions (cheers vs. boos vs. tension silence), rhythmic patterns (coordinated chanting vs. chaotic noise), and temporal dynamics (sudden drops indicating shock or concern).
-            </p>
-            <h4>What It Enables</h4>
-            <ul class="moonshot-list">
-              <li><strong>Real-Time Mood Map:</strong> The Nerve Center displays a live emotional heatmap — zones color-coded by crowd sentiment (elated, tense, frustrated, disengaged). Operators can see a "mood wave" propagate after a goal or controversial decision.</li>
-              <li><strong>Predictive Unrest Detection:</strong> A shift from "excitement" to "frustration + rising amplitude" in a specific zone triggers a preemptive security positioning alert — <strong>4–6 minutes before</strong> visible behavioral indicators emerge. This closes the gap between emotional escalation and physical response.</li>
-              <li><strong>Experience Optimization:</strong> DJ/music, screen content, and light shows adapt in real-time to crowd energy. If post-half-time energy dips, the system triggers a targeted engagement sequence. If a section's sentiment drops post-controversial call, a "fan cam" or replay is served to that section's screens.</li>
-              <li><strong>F&B Demand Forecasting:</strong> Acoustic analysis of frustration/agitation in specific zones correlates with increased concession demand. The system pre-alerts kitchen staff to prepare for surge orders from affected zones.</li>
-            </ul>
-            <h4>Why No One Has Done This Yet</h4>
-            <p>
-              Existing acoustic systems in stadiums are limited to <strong>decibel monitoring</strong> (simple SPL meters). The breakthrough here is applying <strong>environmental sound classification (ESC) models</strong> — specifically, PANNs (Pretrained Audio Neural Networks) fine-tuned for stadium acoustics — combined with <strong>beamforming arrays</strong> that can isolate individual zone audio from a 70,000-person environment. The privacy angle is solved: no speech is captured, only spectral features are extracted, and raw audio is discarded within 500ms of processing.
-            </p>
+      <div class="safety-layout">
+        <!-- Zone Status Grid -->
+        <div class="zone-grid-section">
+          <h2>🏟️ Venue Zones Status</h2>
+          <div id="zone-grid" class="zone-grid" aria-live="polite">
+            <!-- 8 zone cards rendered by JS -->
           </div>
-          <div class="moonshot-specs">
-            <div class="spec-card">
-              <div class="spec-label">Array Size</div>
-              <div class="spec-value">2,048</div>
-              <div class="spec-unit">MEMS microphones</div>
+        </div>
+
+        <div class="safety-right">
+          <!-- Alert Feed with Virtual Scrolling -->
+          <div class="alert-feed-section">
+            <h2>📡 Anomaly Alert Feed</h2>
+            <div class="alert-filters">
+              <button class="filter-btn active" data-severity="all">All</button>
+              <button class="filter-btn" data-severity="INFO">Info</button>
+              <button class="filter-btn" data-severity="WARNING">Warning</button>
+              <button class="filter-btn" data-severity="CRITICAL">Critical</button>
             </div>
-            <div class="spec-card">
-              <div class="spec-label">Latency</div>
-              <div class="spec-value">&lt;800</div>
-              <div class="spec-unit">ms sensor-to-insight</div>
+            <div id="alert-feed" class="alert-feed" role="log" aria-label="Live alert feed" aria-live="polite">
+              <!-- Rendered by JS with virtual scrolling -->
             </div>
-            <div class="spec-card">
-              <div class="spec-label">Sentiment Classes</div>
-              <div class="spec-value">7</div>
-              <div class="spec-unit">emotion categories</div>
+          </div>
+
+          <!-- Evacuation Simulator -->
+          <div class="evac-section">
+            <h2>🚨 Emergency Evacuation Simulator</h2>
+            <div id="evac-map" class="map-container map-sm" role="application" aria-label="Evacuation routes map">
+              <div class="skeleton-map"><div class="skeleton-shimmer"></div><span>Loading Map...</span></div>
             </div>
-            <div class="spec-card">
-              <div class="spec-label">Privacy</div>
-              <div class="spec-value">Zero</div>
-              <div class="spec-unit">speech captured</div>
-            </div>
-            <div class="spec-card">
-              <div class="spec-label">Early Warning</div>
-              <div class="spec-value">4–6</div>
-              <div class="spec-unit">min before incident</div>
-            </div>
-            <div class="spec-card">
-              <div class="spec-label">Model</div>
-              <div class="spec-value">PANNs</div>
-              <div class="spec-unit">fine-tuned for stadia</div>
+            <button id="btn-trigger-evac" class="btn-danger">
+              ⚠️ Trigger Evacuation Simulation
+            </button>
+            <div id="evac-results" class="evac-results" aria-live="assertive" hidden>
+              <!-- Results rendered by JS -->
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+
+      <div class="safety-bottom">
+        <!-- Incident Reporting -->
+        <div class="incident-section">
+          <h2>📝 Incident Report Form</h2>
+          <form id="incident-form" class="incident-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="incident-zone">Zone</label>
+                <select id="incident-zone" required>
+                  <option value="">Select zone...</option>
+                  <option value="Zone 1 - North Stand">Zone 1 - North Stand</option>
+                  <option value="Zone 2 - South Stand">Zone 2 - South Stand</option>
+                  <option value="Zone 3 - East Concourse">Zone 3 - East Concourse</option>
+                  <option value="Zone 4 - West Concourse">Zone 4 - West Concourse</option>
+                  <option value="Zone 5 - VIP Area">Zone 5 - VIP Area</option>
+                  <option value="Zone 6 - Food Court">Zone 6 - Food Court</option>
+                  <option value="Zone 7 - Entry Plaza">Zone 7 - Entry Plaza</option>
+                  <option value="Zone 8 - Parking">Zone 8 - Parking</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="incident-severity">Severity</label>
+                <select id="incident-severity" required>
+                  <option value="INFO">Info</option>
+                  <option value="WARNING" selected>Warning</option>
+                  <option value="CRITICAL">Critical</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="incident-desc">Description</label>
+              <textarea id="incident-desc" rows="3" maxlength="500" required placeholder="Describe the incident..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Submit Incident Report</button>
+            <div id="incident-status" class="form-status" aria-live="polite"></div>
+          </form>
+        </div>
+
+        <!-- AI Risk Assessment -->
+        <div class="risk-section">
+          <h2>🧠 AI Risk Assessment</h2>
+          <div id="ai-risk-assessment" class="ai-insight-area" aria-live="assertive">
+            <p class="ai-placeholder">Request AI-powered risk briefing</p>
+          </div>
+          <button id="btn-risk-ai" class="btn-ai">
+            <span class="btn-ai-icon">✨</span> Run Risk Assessment
+            <span id="ai-cooldown-risk" class="cooldown-timer" hidden></span>
+          </button>
+        </div>
+
+        <!-- FCM Setup -->
+        <div class="fcm-section">
+          <h2>🔔 Push Notifications (FCM)</h2>
+          <div id="fcm-status" class="fcm-status">
+            <p>Firebase Cloud Messaging enables real-time push alerts to staff devices.</p>
+          </div>
+          <button id="btn-setup-fcm" class="btn-secondary">Setup FCM</button>
+          <div id="fcm-token-display" class="code-display" hidden></div>
+          <button id="btn-test-notif" class="btn-secondary" hidden>Send Test Notification</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ TAB 5: ANALYTICS & INSIGHTS ═══ -->
+    <section role="tabpanel" id="panel-analytics" class="tab-panel" aria-labelledby="tab-analytics" hidden>
+      <div class="panel-header">
+        <h1><span class="panel-icon">📊</span> Analytics & Insights</h1>
+        <div class="panel-meta">
+          <span id="analytics-updated" class="last-updated">Updated just now</span>
+        </div>
+      </div>
+
+      <!-- Key Metrics -->
+      <div class="metrics-row" id="metrics-row">
+        <div class="metric-card">
+          <div class="metric-value" id="metric-events">1,247</div>
+          <div class="metric-label">Events Processed</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="metric-attendees">4.2M</div>
+          <div class="metric-label">Attendees Managed</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="metric-incidents">847</div>
+          <div class="metric-label">Incidents Prevented</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="metric-wait">65%</div>
+          <div class="metric-label">Avg Wait Reduction</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="metric-revenue">+$2.1M</div>
+          <div class="metric-label">Revenue Impact</div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="charts-grid">
+        <div class="chart-panel">
+          <h2>Gate Throughput per Hour</h2>
+          <div id="chart-throughput" class="chart-container" role="img" aria-label="Column chart showing gate throughput per hour across 6 gates">
+            <div class="skeleton-chart"><div class="skeleton-shimmer"></div></div>
+          </div>
+        </div>
+        <div class="chart-panel">
+          <h2>Wait Time Trends</h2>
+          <div id="chart-waittrends" class="chart-container" role="img" aria-label="Line chart showing wait time trends over the event timeline">
+            <div class="skeleton-chart"><div class="skeleton-shimmer"></div></div>
+          </div>
+        </div>
+        <div class="chart-panel">
+          <h2>Crowd Distribution by Section</h2>
+          <div id="chart-distribution" class="chart-container" role="img" aria-label="Pie chart showing crowd distribution by stadium section">
+            <div class="skeleton-chart"><div class="skeleton-shimmer"></div></div>
+          </div>
+        </div>
+        <div class="chart-panel">
+          <h2>Cumulative Entries vs Exits</h2>
+          <div id="chart-entries" class="chart-container" role="img" aria-label="Area chart showing cumulative entries versus exits over time">
+            <div class="skeleton-chart"><div class="skeleton-shimmer"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BigQuery Panel -->
+      <div class="bigquery-panel">
+        <h2>🔍 BigQuery Analytics Interface</h2>
+        <p class="panel-desc">Run pre-defined analytics queries against the FlowSphere dataset. Queries execute via Google Cloud Functions connected to BigQuery.</p>
+        <div class="query-selector">
+          <button class="query-btn active" data-query="density">Crowd Density by Zone</button>
+          <button class="query-btn" data-query="waittime">Average Wait Times</button>
+          <button class="query-btn" data-query="incidents">Incident Analysis</button>
+          <button class="query-btn" data-query="revenue">F&B Revenue Breakdown</button>
+        </div>
+        <div class="query-display">
+          <pre id="query-sql" class="code-block">
+SELECT zone_name, AVG(density_score) as avg_density,
+       MAX(density_score) as peak_density,
+       COUNT(CASE WHEN density_score > 5.5 THEN 1 END) as critical_events
+FROM `flowsphere.crowd_analytics.zone_density`
+WHERE event_date = CURRENT_DATE()
+GROUP BY zone_name
+ORDER BY avg_density DESC;</pre>
+          <button id="btn-run-query" class="btn-primary">▶ Execute Query</button>
+        </div>
+        <div id="query-results" class="query-results" aria-live="polite">
+          <p class="empty-state">Select a query and click Execute</p>
+        </div>
+      </div>
+
+      <!-- Cloud Functions Panel -->
+      <div class="cloud-functions-panel">
+        <h2>☁️ Google Cloud Functions</h2>
+        <div class="cf-grid">
+          <div class="cf-card">
+            <h3>calculateCrowdScore(zoneData)</h3>
+            <p>Computes a density risk score (0–100) for a given zone based on real-time sensor data.</p>
+            <button id="btn-cf-crowdscore" class="btn-secondary">Call Function</button>
+            <div id="cf-crowdscore-result" class="cf-result" aria-live="polite"></div>
+          </div>
+          <div class="cf-card">
+            <h3>generateEventReport(eventId)</h3>
+            <p>Generates a structured JSON event summary with attendance, incidents, and performance metrics.</p>
+            <button id="btn-cf-report" class="btn-secondary">Call Function</button>
+            <div id="cf-report-result" class="cf-result" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Looker Studio Placeholder -->
+      <div class="looker-panel">
+        <h2>📈 Looker Studio Dashboard</h2>
+        <div class="looker-placeholder">
+          <div class="looker-frame">
+            <div class="looker-mockup">
+              <div class="looker-header">
+                <span class="looker-logo">Looker Studio</span>
+                <span>FlowSphere Event Analytics — Live Dashboard</span>
+              </div>
+              <div class="looker-body">
+                <div class="looker-widget lw-1">Gate Throughput Overview</div>
+                <div class="looker-widget lw-2">Crowd Density Heatmap</div>
+                <div class="looker-widget lw-3">Wait Time Trends</div>
+                <div class="looker-widget lw-4">Revenue by Section</div>
+                <div class="looker-widget lw-5">Incident Timeline</div>
+                <div class="looker-widget lw-6">Staff Performance</div>
+              </div>
+            </div>
+          </div>
+          <p class="looker-note">In production, this embeds a live Looker Studio dashboard via <code>&lt;iframe src="https://lookerstudio.google.com/embed/..."&gt;</code></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ TAB 6: ATTENDEE PORTAL ═══ -->
+    <section role="tabpanel" id="panel-attendee" class="tab-panel" aria-labelledby="tab-attendee" hidden>
+      <div class="panel-header">
+        <h1><span class="panel-icon">👤</span> Attendee Portal</h1>
+        <div class="panel-meta">
+          <span id="attendee-updated" class="last-updated">Updated just now</span>
+        </div>
+      </div>
+
+      <!-- Auth Gate -->
+      <div id="attendee-auth-gate" class="auth-gate">
+        <div class="auth-gate-content">
+          <div class="auth-gate-icon">👤</div>
+          <h2>Sign in to Access Your Portal</h2>
+          <p>Connect with Google to access your personalized stadium experience</p>
+          <button id="attendee-signin-btn" class="btn-primary btn-lg">
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-1.12-.15-1.17z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2.01c-.72.47-1.63.77-2.7.77a4.73 4.73 0 01-4.44-3.27H1.87v2.08A8 8 0 008.98 17z"/><path fill="#FBBC05" d="M4.54 10.55a4.8 4.8 0 010-3.08V5.39H1.87a8 8 0 000 7.22l2.67-2.06z"/><path fill="#EA4335" d="M8.98 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59A8 8 0 001.87 5.39l2.67 2.08c.6-1.83 2.3-3.89 4.44-3.89z"/></svg>
+            Sign in with Google
+          </button>
+        </div>
+      </div>
+
+      <!-- Authenticated Content -->
+      <div id="attendee-content" class="attendee-content" hidden>
+        <!-- User Profile -->
+        <div class="user-profile-card">
+          <img id="portal-avatar" src="" alt="" class="portal-avatar" width="64" height="64" loading="lazy" />
+          <div class="portal-greeting">
+            <h2 id="portal-greeting">Welcome back!</h2>
+            <p id="portal-email"></p>
+          </div>
+        </div>
+
+        <div class="attendee-grid">
+          <!-- Journey Planner -->
+          <div class="attendee-card">
+            <h2>🗺️ My Journey Planner</h2>
+            <form id="journey-form" class="journey-form" novalidate>
+              <div class="form-group">
+                <label for="journey-seat">Seat Number</label>
+                <input type="text" id="journey-seat" placeholder="e.g., Section 114, Row F, Seat 12" maxlength="50" required />
+              </div>
+              <div class="form-group">
+                <label for="journey-transport">Transport Mode</label>
+                <select id="journey-transport" required>
+                  <option value="Car">Car / Private Vehicle</option>
+                  <option value="Metro">Metro / Train</option>
+                  <option value="Bus">Bus</option>
+                  <option value="Taxi">Taxi / Ride-share</option>
+                  <option value="Walking">Walking</option>
+                </select>
+              </div>
+              <button type="submit" class="btn-ai">
+                <span class="btn-ai-icon">✨</span> Generate My Timeline
+                <span id="ai-cooldown-journey" class="cooldown-timer" hidden></span>
+              </button>
+              <div id="journey-result" class="ai-result-area" aria-live="assertive"></div>
+            </form>
+          </div>
+
+          <!-- Live Wayfinding -->
+          <div class="attendee-card">
+            <h2>📍 Live Wayfinding</h2>
+            <div id="wayfinding-map" class="map-container map-sm" role="application" aria-label="Map showing route to your assigned gate">
+              <div class="skeleton-map"><div class="skeleton-shimmer"></div><span>Loading Map...</span></div>
+            </div>
+            <button id="btn-find-route" class="btn-secondary">📍 Find Route to My Gate</button>
+          </div>
+
+          <!-- My Orders -->
+          <div class="attendee-card">
+            <h2>🛍️ My Orders</h2>
+            <div id="my-orders" class="my-orders" aria-live="polite">
+              <p class="empty-state">No orders yet. Visit the Concessions Hub to place an order!</p>
+            </div>
+          </div>
+
+          <!-- Loyalty Points -->
+          <div class="attendee-card">
+            <h2>🏆 Flow Points</h2>
+            <div class="loyalty-display">
+              <div class="points-balance" id="points-balance">0</div>
+              <div class="points-label">Flow Points</div>
+            </div>
+            <div id="points-history" class="points-history">
+              <!-- Rendered by JS -->
+            </div>
+            <h3>Redemption Catalog</h3>
+            <div class="redemption-grid">
+              <div class="redemption-item"><span>☕</span> Free Chai <div class="redemption-cost">100 pts</div></div>
+              <div class="redemption-item"><span>🍿</span> Free Popcorn <div class="redemption-cost">150 pts</div></div>
+              <div class="redemption-item"><span>🎫</span> Seat Upgrade <div class="redemption-cost">500 pts</div></div>
+              <div class="redemption-item"><span>🏏</span> Meet & Greet Entry <div class="redemption-cost">1000 pts</div></div>
+            </div>
+          </div>
+
+          <!-- Notifications Center -->
+          <div class="attendee-card">
+            <h2>📢 Notifications</h2>
+            <div id="portal-notifications" class="portal-notifications" aria-live="polite">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Accessibility Preferences -->
+          <div class="attendee-card">
+            <h2>♿ Accessibility Preferences</h2>
+            <div class="accessibility-prefs">
+              <label class="pref-toggle">
+                <input type="checkbox" id="pref-high-contrast" />
+                <span class="toggle-switch"></span>
+                <span>High Contrast Mode</span>
+              </label>
+              <label class="pref-toggle">
+                <input type="checkbox" id="pref-large-text" />
+                <span class="toggle-switch"></span>
+                <span>Large Text</span>
+              </label>
+              <label class="pref-toggle">
+                <input type="checkbox" id="pref-haptic" />
+                <span class="toggle-switch"></span>
+                <span>Haptic Alerts</span>
+              </label>
+              <label class="pref-toggle">
+                <input type="checkbox" id="pref-wheelchair" />
+                <span class="toggle-switch"></span>
+                <span>Wheelchair-Accessible Routing</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
 
   <!-- Footer -->
   <footer id="footer">
     <div class="footer-content">
       <div class="footer-brand">
-        <div class="brand-icon">
-          <svg viewBox="0 0 40 40" fill="none">
-            <circle cx="20" cy="20" r="18" stroke="url(#footGrad)" stroke-width="2" />
-            <circle cx="20" cy="20" r="10" stroke="url(#footGrad)" stroke-width="1.5" opacity="0.6" />
-            <circle cx="20" cy="20" r="3" fill="url(#footGrad)" />
-            <defs>
-              <linearGradient id="footGrad" x1="0" y1="0" x2="40" y2="40">
-                <stop offset="0%" stop-color="#00f0ff" />
-                <stop offset="100%" stop-color="#7b61ff" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
+        <svg viewBox="0 0 40 40" fill="none" width="28" height="28" aria-hidden="true">
+          <circle cx="20" cy="20" r="18" stroke="url(#footGrad)" stroke-width="2" />
+          <circle cx="20" cy="20" r="10" stroke="url(#footGrad)" stroke-width="1.5" opacity="0.6" />
+          <circle cx="20" cy="20" r="3" fill="url(#footGrad)" />
+          <defs>
+            <linearGradient id="footGrad" x1="0" y1="0" x2="40" y2="40">
+              <stop offset="0%" stop-color="#00f0ff" />
+              <stop offset="100%" stop-color="#7b61ff" />
+            </linearGradient>
+          </defs>
+        </svg>
         <span>FlowSphere</span>
       </div>
       <p class="footer-tagline">Intelligent Stadium Experience System — Designed by VenueIQ</p>
@@ -973,8 +835,10 @@
       </div>
     </div>
   </footer>
-  </main>
 
-  <script type="module" src="app.js"></script>
+  <!-- Google Charts Loader -->
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <script type="module" src="/app.js"></script>
 </body>
 </html>
